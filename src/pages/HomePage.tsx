@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react'
 import { PRODUCTS, type ProductCategory } from '../data/products'
 import { CategoryChips } from '../components/catalog/CategoryChips'
 import { ProductCard } from '../components/catalog/ProductCard'
+import { BRAND_NAME } from '../constants/brand'
 import { PageHeader } from '../components/layout/PageHeader'
 import { Icon } from '../components/ui/Icon'
 
@@ -24,7 +25,7 @@ export function HomePage() {
 
   return (
     <>
-      <PageHeader title="Цветочная студия" />
+      <PageHeader title={BRAND_NAME} largeLogo />
       <div className="search-bar">
         <Icon icon={Search} size={18} />
         <input

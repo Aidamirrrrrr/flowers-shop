@@ -8,7 +8,6 @@ import { EmptyState } from '../components/ui/EmptyState'
 import { Button } from '../components/ui/Button'
 import { Icon } from '../components/ui/Icon'
 import { hapticImpact } from '../telegram/haptic'
-import { useTelegramMainButton } from '../telegram/useTelegram'
 
 export function CartPage() {
   const { items, total, itemCount } = useCart()
@@ -19,16 +18,10 @@ export function CartPage() {
     navigate('/cart/checkout')
   }
 
-  useTelegramMainButton({
-    visible: items.length > 0,
-    text: 'Оформить заказ',
-    onClick: goCheckout,
-  })
-
   if (items.length === 0) {
     return (
       <>
-        <PageHeader title="Корзина" icon={ShoppingBag} />
+        <PageHeader title="Корзина" />
         <EmptyState
           icon={ShoppingBag}
           title="Корзина пуста"
@@ -51,7 +44,7 @@ export function CartPage() {
 
   return (
     <>
-      <PageHeader title="Корзина" icon={ShoppingBag} />
+      <PageHeader title="Корзина" />
       {items.map((item) => (
         <CartLine key={item.productId} item={item} />
       ))}

@@ -1,19 +1,16 @@
-import { Flower2, type LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
-import { Icon } from '../ui/Icon'
+import { Logo } from '../ui/Logo'
 
 type PageHeaderProps = {
   title: string
-  icon?: LucideIcon
+  largeLogo?: boolean
   children?: ReactNode
 }
 
-export function PageHeader({ title, icon = Flower2, children }: PageHeaderProps) {
+export function PageHeader({ title, largeLogo, children }: PageHeaderProps) {
   return (
-    <header className="page-header">
-      <span className="page-header__icon">
-        <Icon icon={icon} size={22} />
-      </span>
+    <header className={`page-header${largeLogo ? ' page-header--brand' : ''}`}>
+      <Logo size={largeLogo ? 'md' : 'sm'} />
       <h1>{title}</h1>
       {children}
     </header>

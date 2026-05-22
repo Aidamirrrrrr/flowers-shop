@@ -7,11 +7,9 @@ import {
   type CheckoutFormRef,
 } from '../components/cart/CheckoutForm'
 import { PageHeader } from '../components/layout/PageHeader'
+import { Button } from '../components/ui/Button'
 import { hapticNotification } from '../telegram/haptic'
-import {
-  useTelegramMainButton,
-  showDemoAlert,
-} from '../telegram/useTelegram'
+import { showDemoAlert } from '../telegram/useTelegram'
 
 export function CheckoutPage() {
   const { items, total, clearCart } = useCart()
@@ -39,12 +37,6 @@ export function CheckoutPage() {
     }
   }, [items.length, navigate])
 
-  useTelegramMainButton({
-    visible: items.length > 0,
-    text: 'Подтвердить заказ',
-    onClick: handleSubmit,
-  })
-
   if (items.length === 0) {
     return null
   }
@@ -56,9 +48,13 @@ export function CheckoutPage() {
         К оплате: <strong>{formatPrice(total)}</strong>
       </p>
       <CheckoutForm ref={formRef} />
-      <p style={{ marginTop: 24, fontSize: '0.85rem', color: 'var(--tg-hint)' }}>
-        Демо-режим: заказ не отправляется на сервер. Нижняя кнопка Telegram —
-        «Подтвердить заказ».
+      <div style={{ marginTop: 24 }}>
+        <Button variant="primary" block onClick={handleSubmit}>
+          Подтвердить заказ
+        </Button>
+      </div>
+      <p style={{ marginTop: 16, fontSize: '0.85rem', color: 'var(--tg-hint)' }}>
+        Демо-режим: заказ не отправляется на сервер.
       </p>
     </>
   )

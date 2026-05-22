@@ -64,6 +64,9 @@ export function useTelegramMainButton(options: {
     } else {
       WebApp.MainButton.hide()
     }
+    return () => {
+      WebApp.MainButton.hide()
+    }
   }, [visible, text])
 
   useEffect(() => {

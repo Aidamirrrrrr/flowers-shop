@@ -1,4 +1,4 @@
-import { ChevronRight, Info, MessageCircle, Truck, User } from 'lucide-react'
+import { ChevronRight, Info, MessageCircle, Truck } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useTelegramUser, openSupport } from '../telegram/useTelegram'
 import { PageHeader } from '../components/layout/PageHeader'
@@ -25,7 +25,7 @@ export function ProfilePage() {
 
   return (
     <>
-      <PageHeader title="Профиль" icon={User} />
+      <PageHeader title="Профиль" />
       <div className="profile-header">
         <div className="profile-avatar">
           {user?.photo_url ? (
