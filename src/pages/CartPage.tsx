@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../hooks/useCart'
 import { formatPrice } from '../data/products'
 import { CartLine } from '../components/cart/CartLine'
+import { CartSuggestions } from '../components/cart/CartSuggestions'
 import { PageHeader } from '../components/layout/PageHeader'
 import { EmptyState } from '../components/ui/EmptyState'
 import { Button } from '../components/ui/Button'
@@ -32,6 +33,7 @@ export function CartPage() {
             </Button>
           }
         />
+        <CartSuggestions />
         <p className="cart-empty-link">
           <Link to="/about">
             <Icon icon={Truck} size={14} />
@@ -43,7 +45,7 @@ export function CartPage() {
   }
 
   return (
-    <>
+    <div className="cart-page">
       <PageHeader title="Корзина" />
       {items.map((item) => (
         <CartLine key={item.productId} item={item} />
@@ -54,6 +56,8 @@ export function CartPage() {
           Доставка от 2 часов · Оплата при получении
         </Link>
       </p>
+
+      <CartSuggestions />
 
       <div className="cart-footer">
         <div className="cart-footer__row">
@@ -66,6 +70,6 @@ export function CartPage() {
           Оформить заказ
         </Button>
       </div>
-    </>
+    </div>
   )
 }

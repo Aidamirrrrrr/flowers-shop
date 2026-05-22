@@ -6,6 +6,7 @@ export type ProductCategory =
   | 'garden'
   | 'decor'
   | 'books'
+  | 'accessories'
 
 export type Product = {
   id: string
@@ -25,6 +26,7 @@ export const CATEGORIES: { id: ProductCategory; label: string }[] = [
   { id: 'garden', label: 'Садовые букеты' },
   { id: 'decor', label: 'Элементы декора' },
   { id: 'books', label: 'Книги' },
+  { id: 'accessories', label: 'Аксессуары' },
 ]
 
 export const PRODUCTS: Product[] = [
@@ -243,6 +245,30 @@ export const PRODUCTS: Product[] = [
       'Подарочное издание о символике букетов и сет-дизайне. Дополнение к заказу или самостоятельный презент.',
     careTips:
       'Храните в сухом месте. Можем приложить открытку с вашим текстом к заказу.',
+  },
+  {
+    id: '19',
+    name: 'Секатор флористический',
+    price: 1890,
+    image:
+      'https://i.pinimg.com/1200x/5d/da/f1/5ddaf1d8cd21657791f79f89a48fcfc0.jpg',
+    category: 'accessories',
+    description:
+      'Острые лезвия из нержавеющей стали, эргономичные ручки. Для аккуратной подрезки стеблей дома и в студии.',
+    careTips:
+      'Протирайте лезвия после использования, храните в сухом чехле. Не режьте толстые ветки — только стебли цветов.',
+  },
+  {
+    id: '20',
+    name: 'Набор для кензан',
+    price: 3290,
+    image:
+      'https://i.pinimg.com/736x/4f/62/da/4f62daef8b66b1be3a3b57439b1ba255.jpg',
+    category: 'accessories',
+    description:
+      'Кензан 6 см, пинфлейтер и мини-ножницы в фирменном мешочке. Всё для икебаны и композиций в вазе.',
+    careTips:
+      'Промывайте кензан тёплой водой после работы. Храните набор в сухом месте, иглы не касаются твёрдых поверхностей.',
   },
 ]
 
