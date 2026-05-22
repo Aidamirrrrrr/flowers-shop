@@ -1,5 +1,5 @@
-/** Логотип бренда из public/Symbol black.png */
-export const BRAND_LOGO_SRC = '/Symbol%20black.png'
+/** Логотип бренда из public/Symbol black.jpeg */
+export const BRAND_LOGO_SRC = '/Symbol%20black.jpeg'
 
 type LogoProps = {
   size?: 'sm' | 'md' | 'lg'
