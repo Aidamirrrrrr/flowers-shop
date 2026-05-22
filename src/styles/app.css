@@ -703,49 +703,29 @@ select {
   width: 100%;
 }
 
-/* В PNG символ занимает ~10% кадра — увеличиваем через scale в обрезанном контейнере */
-.brand-logo-wrap {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+.brand-logo {
+  display: block;
+  object-fit: contain;
   flex-shrink: 0;
 }
 
-.brand-logo-wrap--sm {
-  width: 36px;
-  height: 36px;
+.brand-logo--sm {
+  width: 24px;
+  height: 24px;
 }
 
-.brand-logo-wrap--md {
-  width: 44px;
-  height: 44px;
+.brand-logo--md {
+  width: 32px;
+  height: 32px;
 }
 
-.brand-logo-wrap--lg {
-  width: 64px;
-  height: 64px;
-}
-
-.brand-logo {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  transform: scale(4.5);
+.brand-logo--lg {
+  width: 48px;
+  height: 48px;
 }
 
 [data-tg-scheme='dark'] .brand-logo {
   filter: invert(1);
-}
-
-.page-header--brand .brand-logo-wrap--md {
-  width: 52px;
-  height: 52px;
-}
-
-.page-header--brand .brand-logo {
-  transform: scale(5);
 }
 
 .page-header--brand {
