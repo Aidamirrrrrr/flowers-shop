@@ -1,7 +1,7 @@
 import { useRef, useCallback, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCart } from '../hooks/useCart'
-import { formatPrice } from '../data/products'
+import { formatPrice, getProductById } from '../data/products'
 import {
   CheckoutForm,
   type CheckoutFormRef,
@@ -23,13 +23,22 @@ export function CheckoutPage() {
       return
     }
 
+    const postcards = items
+      .filter((i) => i.postcardText)
+      .map((i) => {
+        const name = getProductById(i.productId)?.name ?? 'Букет'
+        return `${name}: «${i.postcardText}»`
+      })
+    const postcardBlock =
+      postcards.length > 0 ? `\n\nОткрытки:\n${postcards.join('\n')}` : ''
+
     hapticNotification('success')
     clearCart()
     showDemoAlert(
-      `Заказ принят (демо)!\n\n${data.name}\n${data.phone}\n${data.address}\n${data.datetime}`,
+      `Заказ принят (демо)!\n\n${data.name}\n${data.phone}\n${data.address}\n${data.datetime}${postcardBlock}`,
     )
     navigate('/profile')
-  }, [clearCart, navigate])
+  }, [clearCart, navigate, items])
 
   useEffect(() => {
     if (items.length === 0) {

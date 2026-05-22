@@ -6,6 +6,7 @@ import { useCart } from '../hooks/useCart'
 import { Price } from '../components/ui/Price'
 import { Button } from '../components/ui/Button'
 import { Icon } from '../components/ui/Icon'
+import { PostcardField } from '../components/cart/PostcardField'
 import { hapticImpact } from '../telegram/haptic'
 
 export function ProductPage() {
@@ -13,6 +14,7 @@ export function ProductPage() {
   const navigate = useNavigate()
   const { addItem, getQty } = useCart()
   const [justAdded, setJustAdded] = useState(false)
+  const [showPostcard, setShowPostcard] = useState(false)
   const product = id ? getProductById(id) : undefined
 
   if (!product) {
@@ -32,6 +34,7 @@ export function ProductPage() {
     addItem(product.id)
     hapticImpact('medium')
     setJustAdded(true)
+    setShowPostcard(true)
     window.setTimeout(() => setJustAdded(false), 600)
   }
 
@@ -59,6 +62,14 @@ export function ProductPage() {
         <Icon icon={Truck} size={16} />
         О доставке и оплате
       </Link>
+
+      {(qty > 0 || showPostcard) && (
+        <PostcardField
+          key={product.id}
+          productId={product.id}
+          requireInCart={false}
+        />
+      )}
 
       <div className="sticky-actions sticky-actions--product">
         <Button

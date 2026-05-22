@@ -63,6 +63,12 @@ export function CartLine({ item }: CartLineProps) {
             <Icon icon={Trash2} size={16} />
           </button>
         </div>
+        {item.postcardText && (
+          <p className="cart-line__postcard">
+            <span className="cart-line__postcard-label">Открытка:</span>{' '}
+            {item.postcardText}
+          </p>
+        )}
       </div>
     </div>
   )

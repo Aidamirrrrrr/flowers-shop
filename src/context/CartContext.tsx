@@ -117,6 +117,27 @@ export function CartProvider({ children }: { children: ReactNode }) {
     [state.items],
   )
 
+  const getPostcardText = useCallback(
+    (productId: string) =>
+      cartState.items.find((i) => i.productId === productId)?.postcardText ?? '',
+    [],
+  )
+
+  const setPostcardText = useCallback((productId: string, text: string) => {
+    const trimmed = text.trim()
+    if (!cartState.items.some((i) => i.productId === productId)) return
+
+    cartState = {
+      items: cartState.items.map((i) =>
+        i.productId === productId
+          ? { ...i, postcardText: trimmed || undefined }
+          : i,
+      ),
+    }
+    persist()
+    emit()
+  }, [])
+
   const value = useMemo(
     () => ({
       items: state.items,
@@ -127,8 +148,21 @@ export function CartProvider({ children }: { children: ReactNode }) {
       updateQty,
       clearCart,
       getQty,
+      getPostcardText,
+      setPostcardText,
     }),
-    [state.items, itemCount, total, addItem, removeItem, updateQty, clearCart, getQty],
+    [
+      state.items,
+      itemCount,
+      total,
+      addItem,
+      removeItem,
+      updateQty,
+      clearCart,
+      getQty,
+      getPostcardText,
+      setPostcardText,
+    ],
   )
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>
