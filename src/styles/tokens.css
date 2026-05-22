@@ -1,0 +1,33 @@
+:root {
+  /* Telegram theme (overridden by applyTelegramTheme + mock) */
+  --tg-bg: #ffffff;
+  --tg-text: #000000;
+  --tg-hint: #707579;
+  --tg-link: #3390ec;
+  --tg-button: #3390ec;
+  --tg-button-text: #ffffff;
+  --tg-secondary-bg: #f4f4f5;
+  --tg-accent: #3390ec;
+  --tg-destructive: #df3f40;
+  --tg-header-bg: #ffffff;
+  --tg-section-bg: #ffffff;
+  --tg-subtitle: #707579;
+
+  --brand-border: color-mix(in srgb, var(--tg-hint) 25%, transparent);
+  --brand-shadow: 0 4px 24px color-mix(in srgb, var(--tg-text) 8%, transparent);
+
+  --app-max-width: 430px;
+  --tab-bar-height: 56px;
+  --header-height: 48px;
+  --radius: 12px;
+  --radius-lg: 16px;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 0.2s;
+  --duration-normal: 0.35s;
+}
+
+[data-tg-scheme='dark'] {
+  --brand-border: color-mix(in srgb, var(--tg-hint) 35%, transparent);
+  --brand-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+}
