@@ -1,6 +1,11 @@
+import {
+  BRAND_THEME_DARK,
+  BRAND_THEME_LIGHT,
+  type BrandThemeKey,
+} from '../styles/brandTheme'
 import { getWebApp } from './webApp'
 
-const THEME_MAP: [string, string][] = [
+const THEME_MAP: [string, BrandThemeKey][] = [
   ['--tg-bg', 'bg_color'],
   ['--tg-text', 'text_color'],
   ['--tg-hint', 'hint_color'],
@@ -16,14 +21,14 @@ const THEME_MAP: [string, string][] = [
 ]
 
 export function applyTelegramTheme() {
-  const tp = getWebApp().themeParams
+  const scheme =
+    String(getWebApp().colorScheme) === 'dark' ? 'dark' : 'light'
+  const palette = scheme === 'dark' ? BRAND_THEME_DARK : BRAND_THEME_LIGHT
   const root = document.documentElement
 
   for (const [cssVar, key] of THEME_MAP) {
-    const value = tp[key as keyof typeof tp]
-    if (value) root.style.setProperty(cssVar, value)
+    root.style.setProperty(cssVar, palette[key])
   }
 
-  const scheme = getWebApp().colorScheme
   root.dataset.tgScheme = scheme
 }

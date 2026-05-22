@@ -47,7 +47,7 @@ export const CheckoutForm = forwardRef<CheckoutFormRef>(function CheckoutForm(
   return (
     <form className="checkout-form" onSubmit={(e) => e.preventDefault()}>
       {error && (
-        <p style={{ color: 'var(--brand-rose)', margin: 0, fontSize: '0.9rem' }}>
+        <p style={{ color: 'var(--tg-text)', margin: 0, fontSize: '0.9rem' }}>
           {error}
         </p>
       )}

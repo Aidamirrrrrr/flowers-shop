@@ -31,7 +31,7 @@
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(232, 93, 122, 0.45);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .dev-tg-main:disabled {

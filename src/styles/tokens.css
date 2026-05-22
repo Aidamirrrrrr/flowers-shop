@@ -1,33 +1,35 @@
 :root {
-  /* Telegram theme (overridden by applyTelegramTheme + mock) */
+  /* Монохром — elementbymosk-стиль */
   --tg-bg: #ffffff;
-  --tg-text: #000000;
-  --tg-hint: #707579;
-  --tg-link: #3390ec;
-  --tg-button: #3390ec;
+  --tg-text: #111111;
+  --tg-hint: #737373;
+  --tg-link: #111111;
+  --tg-button: #111111;
   --tg-button-text: #ffffff;
-  --tg-secondary-bg: #f4f4f5;
-  --tg-accent: #3390ec;
-  --tg-destructive: #df3f40;
+  --tg-secondary-bg: #f5f5f5;
+  --tg-accent: #111111;
+  --tg-destructive: #111111;
   --tg-header-bg: #ffffff;
   --tg-section-bg: #ffffff;
-  --tg-subtitle: #707579;
+  --tg-subtitle: #525252;
 
-  --brand-border: color-mix(in srgb, var(--tg-hint) 25%, transparent);
-  --brand-shadow: 0 4px 24px color-mix(in srgb, var(--tg-text) 8%, transparent);
+  --brand-border: #e5e5e5;
+  --brand-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
 
   --app-max-width: 430px;
   --tab-bar-height: 56px;
   --header-height: 48px;
-  --radius: 12px;
-  --radius-lg: 16px;
+  --radius: 8px;
+  --radius-lg: 10px;
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --duration-fast: 0.2s;
   --duration-normal: 0.35s;
+
+  --font-display: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 
 [data-tg-scheme='dark'] {
-  --brand-border: color-mix(in srgb, var(--tg-hint) 35%, transparent);
-  --brand-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+  --brand-border: #262626;
+  --brand-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
 }

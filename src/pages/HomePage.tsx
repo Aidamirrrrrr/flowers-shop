@@ -24,7 +24,7 @@ export function HomePage() {
 
   return (
     <>
-      <PageHeader title="Цветочная лавка" />
+      <PageHeader title="Цветочная студия" />
       <div className="search-bar">
         <Icon icon={Search} size={18} />
         <input

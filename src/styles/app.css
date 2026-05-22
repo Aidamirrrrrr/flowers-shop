@@ -15,17 +15,13 @@ body,
 }
 
 body {
-  font-family:
-    system-ui,
-    -apple-system,
-    'Segoe UI',
-    Roboto,
-    sans-serif;
+  font-family: var(--font-display);
   font-size: 16px;
-  line-height: 1.45;
+  line-height: 1.5;
   color: var(--tg-text);
   background: var(--tg-bg);
   -webkit-font-smoothing: antialiased;
+  letter-spacing: 0.01em;
 }
 
 a {
@@ -55,7 +51,7 @@ select {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  background: var(--tg-bg, var(--brand-cream));
+  background: var(--tg-bg);
 }
 
 .app-main {
@@ -82,8 +78,10 @@ select {
 
 .page-header h1 {
   margin: 0;
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--tg-text);
 }
 
@@ -119,7 +117,8 @@ select {
 }
 
 .tab-bar__item--active {
-  color: var(--tg-link);
+  color: var(--tg-text);
+  font-weight: 600;
 }
 
 .tab-bar__icon-wrap {
@@ -165,11 +164,16 @@ select {
 .btn--primary {
   background: var(--tg-button);
   color: var(--tg-button-text);
+  border-radius: var(--radius);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  font-weight: 500;
 }
 
 .btn--secondary {
   background: var(--tg-secondary-bg);
-  color: var(--tg-link);
+  color: var(--tg-text);
   border: 1px solid var(--brand-border);
 }
 
@@ -189,8 +193,9 @@ select {
 }
 
 .price {
-  font-weight: 700;
-  color: var(--tg-link);
+  font-weight: 600;
+  color: var(--tg-text);
+  letter-spacing: 0.02em;
 }
 
 .price--lg {
@@ -270,9 +275,9 @@ select {
 }
 
 .chip--active {
-  border-color: var(--tg-link);
-  background: color-mix(in srgb, var(--tg-link) 14%, transparent);
-  color: var(--tg-link);
+  border-color: var(--tg-text);
+  background: var(--tg-text);
+  color: var(--tg-bg);
 }
 
 .product-grid {
@@ -283,10 +288,10 @@ select {
 
 .product-card {
   display: block;
-  background: var(--tg-secondary-bg, #fff);
+  background: var(--tg-bg);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: var(--brand-shadow);
+  border: 1px solid var(--brand-border);
   text-decoration: none;
   color: inherit;
 }
@@ -357,7 +362,7 @@ select {
   align-items: center;
   gap: 8px;
   margin-bottom: 8px;
-  color: var(--tg-link);
+  color: var(--tg-text);
 }
 
 .info-block__head h3 {
@@ -492,7 +497,7 @@ select {
 .form-field input:focus,
 .form-field textarea:focus,
 .form-field select:focus {
-  border-color: var(--tg-link);
+  border-color: var(--tg-text);
 }
 
 .profile-header {
@@ -510,13 +515,14 @@ select {
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--tg-link) 18%, transparent);
+  background: var(--tg-secondary-bg);
+  border: 1px solid var(--brand-border);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--tg-link);
+  font-weight: 500;
+  color: var(--tg-text);
   overflow: hidden;
 }
 
@@ -575,7 +581,7 @@ select {
 }
 
 .menu-item__label svg {
-  color: var(--tg-link);
+  color: var(--tg-text);
   flex-shrink: 0;
 }
 
@@ -619,8 +625,11 @@ select {
 
 .about-section h2 {
   margin: 0 0 10px;
-  font-size: 1.05rem;
-  color: var(--tg-link);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tg-text);
 }
 
 .about-section p {
@@ -695,5 +704,22 @@ select {
 }
 
 .page-header__icon {
-  color: var(--tg-link);
+  color: var(--tg-text);
+}
+
+.product-page__title {
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.search-bar {
+  border-radius: var(--radius);
+  background: var(--tg-bg);
+}
+
+.profile-header,
+.menu-list,
+.order-card {
+  border: 1px solid var(--brand-border);
+  box-shadow: none;
 }
