@@ -1,4 +1,11 @@
-export type ProductCategory = 'all' | 'roses' | 'mix' | 'premium'
+export type ProductCategory =
+  | 'all'
+  | 'peonies'
+  | 'callas'
+  | 'exotic'
+  | 'garden'
+  | 'decor'
+  | 'books'
 
 export type Product = {
   id: string
@@ -12,9 +19,12 @@ export type Product = {
 
 export const CATEGORIES: { id: ProductCategory; label: string }[] = [
   { id: 'all', label: 'Все' },
-  { id: 'roses', label: 'Розы' },
-  { id: 'mix', label: 'Миксы' },
-  { id: 'premium', label: 'Премиум' },
+  { id: 'peonies', label: 'Пионы' },
+  { id: 'callas', label: 'Каллы' },
+  { id: 'exotic', label: 'Экзотика' },
+  { id: 'garden', label: 'Садовые букеты' },
+  { id: 'decor', label: 'Элементы декора' },
+  { id: 'books', label: 'Книги' },
 ]
 
 export const PRODUCTS: Product[] = [
@@ -24,7 +34,7 @@ export const PRODUCTS: Product[] = [
     price: 4590,
     image:
       'https://i.pinimg.com/736x/f3/3b/40/f33b40433fb4e3e112eb78ccc79422d2.jpg',
-    category: 'mix',
+    category: 'garden',
     description:
       'Розы пыльно-розового оттенка и белая эустома в матовой полупрозрачной упаковке. Нежный подарок на свидание или день рождения.',
     careTips:
@@ -36,9 +46,9 @@ export const PRODUCTS: Product[] = [
     price: 5290,
     image:
       'https://i.pinimg.com/736x/88/9f/23/889f231f1a80c9de73b8e7aa1c8509fd.jpg',
-    category: 'roses',
+    category: 'garden',
     description:
-      'Пышный букет кремовых и белых роз с ветками эвкалипта в розовой авторской упаковке. Классика в мягких пастельных тонах.',
+      'Пышный букет кремовых и белых роз с ветками эвкалипта в авторской упаковке. Классика в мягких пастельных тонах.',
     careTips:
       'Обрежьте стебли под углом 45°. Добавьте подкормку для срезанных цветов — букет простоит дольше.',
   },
@@ -48,7 +58,7 @@ export const PRODUCTS: Product[] = [
     price: 3890,
     image:
       'https://i.pinimg.com/736x/2f/ba/8d/2fba8d0e32a70b3f0f70e1a7a122840d.jpg',
-    category: 'mix',
+    category: 'exotic',
     description:
       'Свежий монобукет из белых альстромерий в воздушной матовой упаковке. Лаконично, стильно, подходит на каждый день.',
     careTips:
@@ -60,7 +70,7 @@ export const PRODUCTS: Product[] = [
     price: 6490,
     image:
       'https://i.pinimg.com/736x/f0/a0/20/f0a020825b38cb03d8a560644ae0adbe.jpg',
-    category: 'roses',
+    category: 'garden',
     description:
       'Объёмный букет из нежно-розовых кустовых роз в полупрозрачной упаковке с атласной лентой. Эффект «облака» из лепестков.',
     careTips:
@@ -72,7 +82,7 @@ export const PRODUCTS: Product[] = [
     price: 5990,
     image:
       'https://i.pinimg.com/736x/32/46/c1/3246c172ab6d49d1e8a608a38ccd9ae1.jpg',
-    category: 'premium',
+    category: 'garden',
     description:
       'Белые кустовые розы, гортензия и хризантемы в матовой упаковке с широкой атласной лентой. Для торжественного случая.',
     careTips:
@@ -84,7 +94,7 @@ export const PRODUCTS: Product[] = [
     price: 7290,
     image:
       'https://i.pinimg.com/736x/ca/e7/6c/cae76c0a55a5b844fa77344cc941b450.jpg',
-    category: 'premium',
+    category: 'exotic',
     description:
       'Голубая гортензия и кремовые розы в многослойной белой упаковке с воздушной лентой. Свежий и воздушный образ.',
     careTips:
@@ -96,7 +106,7 @@ export const PRODUCTS: Product[] = [
     price: 8490,
     image:
       'https://i.pinimg.com/736x/68/05/02/680502f14f133989a630f6989281496a.jpg',
-    category: 'premium',
+    category: 'exotic',
     description:
       'Пышные розовые ранункулюсы и маттиола в белой подарочной коробке. Премиальный формат без вазы.',
     careTips:
@@ -108,9 +118,9 @@ export const PRODUCTS: Product[] = [
     price: 7890,
     image:
       'https://i.pinimg.com/1200x/6b/2e/76/6b2e7628873f29a6d73ba66e20ec2bf3.jpg',
-    category: 'premium',
+    category: 'garden',
     description:
-      'Кустовые розы с градиентом от алых до персиковых лепестков в крафтовой упаковке. Яркий премиальный акцент.',
+      'Кустовые розы с градиентом от алых до персиковых лепестков в крафтовой упаковке. Яркий авторский акцент.',
     careTips:
       'Доставляем в аквабоксе. Срежьте стебли и поставьте в чистую вазу с прохладной водой.',
   },
@@ -120,7 +130,7 @@ export const PRODUCTS: Product[] = [
     price: 4990,
     image:
       'https://i.pinimg.com/1200x/53/e5/17/53e517e442f373ae2cfd1fb0bc130f46.jpg',
-    category: 'mix',
+    category: 'garden',
     description:
       'Монобукет из свежих белых тюльпанов в объёмной белой упаковке. Минимализм и чистые линии.',
     careTips:
@@ -132,9 +142,9 @@ export const PRODUCTS: Product[] = [
     price: 5490,
     image:
       'https://i.pinimg.com/736x/39/87/66/398766a01cffd4385e5c9dbf2b111376.jpg',
-    category: 'roses',
+    category: 'garden',
     description:
-      'Классический букет из бархатных красных роз на белом фоне. Признание без лишних слов.',
+      'Классический букет из бархатных красных роз. Признание без лишних слов.',
     careTips:
       'Обрежьте стебли под углом, меняйте воду каждые 2 дня. Держите подальше от батарей.',
   },
@@ -144,7 +154,7 @@ export const PRODUCTS: Product[] = [
     price: 4790,
     image:
       'https://i.pinimg.com/736x/83/60/8e/83608e0b006d5c58d5eef6b966123c5a.jpg',
-    category: 'mix',
+    category: 'garden',
     description:
       'Объёмный букет белой и розовой эустомы в воздушной белой упаковке. Нежность и романтика в каждом лепестке.',
     careTips:
@@ -156,7 +166,7 @@ export const PRODUCTS: Product[] = [
     price: 5690,
     image:
       'https://i.pinimg.com/736x/3e/8b/59/3e8b59f3035dd94b98647270e6de0972.jpg',
-    category: 'mix',
+    category: 'garden',
     description:
       'Гортензии и кустовые розы в оттенках розового в многослойной белой упаковке. Солнечное и праздничное настроение.',
     careTips:
@@ -168,7 +178,7 @@ export const PRODUCTS: Product[] = [
     price: 6190,
     image:
       'https://i.pinimg.com/736x/6d/fe/d0/6dfed011b6e7f06b21c1a4770ee278f7.jpg',
-    category: 'roses',
+    category: 'garden',
     description:
       'Персиковые розы и бордовые кустовые розы в крафте с винтажным подкладом и органзой. Авторская флористика.',
     careTips:
@@ -180,7 +190,7 @@ export const PRODUCTS: Product[] = [
     price: 12990,
     image:
       'https://i.pinimg.com/1200x/db/08/09/db0809c0cdeed0ab17c9a6e0dcc1d6ca.jpg',
-    category: 'premium',
+    category: 'peonies',
     description:
       'Роскошная корзина с белыми пионами — пышный полусферический монобукет. Для особого торжества.',
     careTips:
@@ -192,11 +202,47 @@ export const PRODUCTS: Product[] = [
     price: 8990,
     image:
       'https://i.pinimg.com/1200x/79/b1/2a/79b12a4ef5bf17a584ec76818248cb65.jpg',
-    category: 'premium',
+    category: 'garden',
     description:
       'Максимальный букет из нежно-розовых кустовых роз в матовой упаковке с атласной лентой. Впечатляющий масштаб.',
     careTips:
       'Из-за объёма меняйте воду чаще — каждые 1–2 дня. Используйте высокую вазу.',
+  },
+  {
+    id: '16',
+    name: 'Белые каллы 11 шт',
+    price: 6290,
+    image:
+      'https://i.pinimg.com/736x/32/46/c1/3246c172ab6d49d1e8a608a38ccd9ae1.jpg',
+    category: 'callas',
+    description:
+      'Элегантный букет из белых калл в матовой упаковке. Сдержанная форма и чистая линия стебля.',
+    careTips:
+      'Каллы любят прохладную воду. Меняйте воду каждые 2 дня, не допускайте сквозняков.',
+  },
+  {
+    id: '17',
+    name: 'Сухоцветы в шляпной коробке',
+    price: 4590,
+    image:
+      'https://i.pinimg.com/736x/68/05/02/680502f14f133989a630f6989281496a.jpg',
+    category: 'decor',
+    description:
+      'Стойкая композиция из сухоцветов и лагуруса в фирменной коробке ELEMENT CONCEPT. Декор без ухода.',
+    careTips:
+      'Оберегайте от влаги и прямого солнца. Протирайте пыль сухой салфеткой раз в месяц.',
+  },
+  {
+    id: '18',
+    name: 'Книга «Язык цветов»',
+    price: 2490,
+    image:
+      'https://i.pinimg.com/736x/ca/e7/6c/cae76c0a55a5b844fa77344cc941b450.jpg',
+    category: 'books',
+    description:
+      'Подарочное издание о символике букетов и сет-дизайне. Дополнение к заказу или самостоятельный презент.',
+    careTips:
+      'Храните в сухом месте. Можем приложить открытку с вашим текстом к заказу.',
   },
 ]
 

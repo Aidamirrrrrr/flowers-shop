@@ -4,7 +4,7 @@ import { applyTelegramTheme } from './applyTheme'
 import { hapticImpact } from './haptic'
 import { getWebApp } from './webApp'
 
-const STACK_ROUTES = ['/product/', '/cart/checkout', '/about']
+const STACK_ROUTES = ['/product/', '/cart/checkout']
 
 function isStackRoute(pathname: string) {
   return STACK_ROUTES.some((r) =>

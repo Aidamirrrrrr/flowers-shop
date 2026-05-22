@@ -1,4 +1,4 @@
-import { Home, ShoppingCart, User } from 'lucide-react'
+import { Home, Info, ShoppingCart, User } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import { useCart } from '../../hooks/useCart'
 import { Icon } from '../ui/Icon'
@@ -16,7 +16,7 @@ export function TabBar() {
         }
       >
         <span className="tab-bar__icon-wrap">
-          <Icon icon={Home} size={22} />
+          <Icon icon={Home} size={20} />
         </span>
         Главная
       </NavLink>
@@ -27,7 +27,7 @@ export function TabBar() {
         }
       >
         <span className="tab-bar__icon-wrap">
-          <Icon icon={ShoppingCart} size={22} />
+          <Icon icon={ShoppingCart} size={20} />
         </span>
         Корзина
         {itemCount > 0 && (
@@ -37,13 +37,24 @@ export function TabBar() {
         )}
       </NavLink>
       <NavLink
+        to="/about"
+        className={({ isActive }) =>
+          `tab-bar__item${isActive ? ' tab-bar__item--active' : ''}`
+        }
+      >
+        <span className="tab-bar__icon-wrap">
+          <Icon icon={Info} size={20} />
+        </span>
+        О нас
+      </NavLink>
+      <NavLink
         to="/profile"
         className={({ isActive }) =>
           `tab-bar__item${isActive ? ' tab-bar__item--active' : ''}`
         }
       >
         <span className="tab-bar__icon-wrap">
-          <Icon icon={User} size={22} />
+          <Icon icon={User} size={20} />
         </span>
         Профиль
       </NavLink>

@@ -1,5 +1,4 @@
-import { ChevronRight, Info, MessageCircle, Truck } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { ChevronRight, MessageCircle } from 'lucide-react'
 import { useTelegramUser, openSupport } from '../telegram/useTelegram'
 import { PageHeader } from '../components/layout/PageHeader'
 import { Icon } from '../components/ui/Icon'
@@ -41,20 +40,6 @@ export function ProfilePage() {
       </div>
 
       <nav className="menu-list" aria-label="Меню профиля">
-        <Link to="/about" className="menu-item">
-          <span className="menu-item__label">
-            <Icon icon={Info} size={20} />
-            О нас
-          </span>
-          <Icon icon={ChevronRight} size={18} className="menu-item__arrow" />
-        </Link>
-        <Link to="/about#delivery" className="menu-item">
-          <span className="menu-item__label">
-            <Icon icon={Truck} size={20} />
-            Доставка и оплата
-          </span>
-          <Icon icon={ChevronRight} size={18} className="menu-item__arrow" />
-        </Link>
         <button type="button" className="menu-item" onClick={openSupport}>
           <span className="menu-item__label">
             <Icon icon={MessageCircle} size={20} />

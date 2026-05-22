@@ -3,7 +3,7 @@ import { DevTelegramBar } from '../../telegram/DevTelegramBar'
 import { useTelegramBackButton, useTelegramInit } from '../../telegram/useTelegram'
 import { TabBar } from './TabBar'
 
-const HIDE_TAB_PATHS = ['/product/', '/cart/checkout', '/about']
+const HIDE_TAB_PATHS = ['/product/', '/cart/checkout']
 
 function shouldHideTabBar(pathname: string) {
   return HIDE_TAB_PATHS.some((p) =>

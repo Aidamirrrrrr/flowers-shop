@@ -111,7 +111,7 @@ select {
   border: none;
   background: none;
   color: var(--tg-hint);
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   text-decoration: none;
   position: relative;
 }

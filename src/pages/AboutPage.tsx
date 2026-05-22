@@ -1,13 +1,10 @@
 import { BRAND_NAME } from '../constants/brand'
-import { Logo } from '../components/ui/Logo'
+import { PageHeader } from '../components/layout/PageHeader'
 
 export function AboutPage() {
   return (
     <>
-      <header className="about-hero">
-        <Logo size="lg" />
-        <h1>О нас</h1>
-      </header>
+      <PageHeader title="О нас" largeLogo />
 
       <section className="about-section" id="about">
         <h2>{BRAND_NAME}</h2>
