@@ -525,7 +525,19 @@ select {
 }
 
 .cart-page {
-  padding-bottom: calc(120px + var(--tab-bar-height) + env(safe-area-inset-bottom, 0px));
+  padding-bottom: 0;
+}
+
+.cart-page__spacer {
+  height: calc(
+    var(--cart-footer-height) + var(--tab-bar-height) +
+      env(safe-area-inset-bottom, 0px) + 16px
+  );
+  flex-shrink: 0;
+}
+
+.cart-empty-link--in-cart {
+  margin-bottom: 8px;
 }
 
 .cart-suggestions {

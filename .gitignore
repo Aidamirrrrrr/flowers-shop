@@ -10,7 +10,12 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+.next
+src/generated
+tsconfig.tsbuildinfo
 *.local
+.env
+.env*.local
 
 # Editor directories and files
 .vscode/*
@@ -22,3 +27,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+/src/generated/prisma

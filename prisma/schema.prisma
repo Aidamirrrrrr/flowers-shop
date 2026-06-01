@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum OrderStatus {
+  NEW
+  CONFIRMED
+  DELIVERING
+  DELIVERED
+  CANCELLED
+}
+
+model User {
+  id         String   @id @default(cuid())
+  telegramId BigInt   @unique
+  username   String?
+  firstName  String?
+  lastName   String?
+  role       Role     @default(USER)
+  createdAt  DateTime @default(now())
+  orders     Order[]
+}
+
+model Category {
+  id       String    @id
+  label    String
+  sort     Int       @default(0)
+  products Product[]
+}
+
+model Product {
+  id          String           @id
+  name        String
+  price       Int
+  image       String
+  description String
+  careTips    String
+  categoryId  String
+  category    Category         @relation(fields: [categoryId], references: [id])
+  active      Boolean          @default(true)
+  suggestion  CartSuggestion?
+  orderItems  OrderItem[]
+}
+
+model CartSuggestion {
+  productId String  @id
+  sort      Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model AppSettings {
+  id            String  @id @default("default")
+  deliveryText  String
+  deliveryHours String?
+}
+
+model Order {
+  id           String      @id @default(cuid())
+  userId       String?
+  user         User?       @relation(fields: [userId], references: [id])
+  status       OrderStatus @default(NEW)
+  customerName String
+  phone        String
+  address      String
+  deliveryAt   DateTime
+  total        Int
+  createdAt    DateTime    @default(now())
+  items        OrderItem[]
+}
+
+model OrderItem {
+  id           String  @id @default(cuid())
+  orderId      String
+  order        Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId    String
+  product      Product @relation(fields: [productId], references: [id])
+  quantity     Int
+  price        Int
+  postcardText String?
+}

@@ -50,7 +50,7 @@ export function CartPage() {
       {items.map((item) => (
         <CartLine key={item.productId} item={item} />
       ))}
-      <p className="cart-empty-link">
+      <p className="cart-empty-link cart-empty-link--in-cart">
         <Link to="/about">
           <Icon icon={Truck} size={14} />
           Доставка от 2 часов · Оплата при получении
@@ -58,6 +58,8 @@ export function CartPage() {
       </p>
 
       <CartSuggestions />
+
+      <div className="cart-page__spacer" aria-hidden />
 
       <div className="cart-footer">
         <div className="cart-footer__row">
