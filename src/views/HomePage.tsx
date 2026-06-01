@@ -1,3 +1,5 @@
+'use client'
+
 import { Search } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { PRODUCTS, type ProductCategory } from '../data/products'

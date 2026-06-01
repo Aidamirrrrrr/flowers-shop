@@ -1,3 +1,5 @@
+'use client'
+
 import {
   useCallback,
   useMemo,
@@ -25,8 +27,17 @@ function loadCart(): CartState {
   }
 }
 
-let cartState: CartState = loadCart()
+const EMPTY_CART: CartState = { items: [] }
+
+let cartState: CartState = EMPTY_CART
+let cartHydrated = false
 const listeners = new Set<() => void>()
+
+function hydrateCartFromStorage() {
+  if (cartHydrated || typeof window === 'undefined') return
+  cartState = loadCart()
+  cartHydrated = true
+}
 
 function emit() {
   listeners.forEach((l) => l())
@@ -42,11 +53,16 @@ function subscribe(listener: () => void) {
 }
 
 function getSnapshot() {
+  hydrateCartFromStorage()
   return cartState
 }
 
+function getServerSnapshot() {
+  return EMPTY_CART
+}
+
 export function CartProvider({ children }: { children: ReactNode }) {
-  const state = useSyncExternalStore(subscribe, getSnapshot)
+  const state = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
 
   const total = useMemo(
     () =>

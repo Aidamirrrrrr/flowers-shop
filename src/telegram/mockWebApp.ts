@@ -188,7 +188,8 @@ function isRealTelegramWebApp(
 }
 
 export function initDevTelegramMock() {
-  if (!import.meta.env.DEV) return
+  if (process.env.NODE_ENV !== 'development') return
+  if (typeof window === 'undefined') return
 
   const win = getTelegramWindow()
   const existing = win.Telegram?.WebApp

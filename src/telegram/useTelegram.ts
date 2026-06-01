@@ -1,5 +1,7 @@
+'use client'
+
 import { useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { usePathname, useRouter } from 'next/navigation'
 import { applyTelegramTheme } from './applyTheme'
 import { hapticImpact } from './haptic'
 import { getWebApp } from './webApp'
@@ -22,9 +24,9 @@ export function useTelegramInit() {
 }
 
 export function useTelegramBackButton() {
-  const location = useLocation()
-  const navigate = useNavigate()
-  const show = isStackRoute(location.pathname)
+  const pathname = usePathname()
+  const router = useRouter()
+  const show = isStackRoute(pathname)
 
   useEffect(() => {
     const WebApp = getWebApp()
@@ -39,13 +41,13 @@ export function useTelegramBackButton() {
     const WebApp = getWebApp()
     const handler = () => {
       hapticImpact('light')
-      navigate(-1)
+      router.back()
     }
     WebApp.BackButton.onClick(handler)
     return () => {
       WebApp.BackButton.offClick(handler)
     }
-  }, [navigate])
+  }, [router])
 }
 
 export function useTelegramMainButton(options: {
@@ -88,7 +90,12 @@ export function useTelegramMainButton(options: {
 }
 
 export function useTelegramUser() {
-  return getWebApp().initDataUnsafe.user ?? null
+  if (typeof window === 'undefined') return null
+  try {
+    return getWebApp().initDataUnsafe.user ?? null
+  } catch {
+    return null
+  }
 }
 
 export {
@@ -98,10 +105,12 @@ export {
 } from './haptic'
 
 export function showDemoAlert(message: string) {
+  if (typeof window === 'undefined') return
   getWebApp().showAlert(message)
 }
 
 export function openSupport() {
+  if (typeof window === 'undefined') return
   getWebApp().openTelegramLink('https://t.me/support')
 }
 

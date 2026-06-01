@@ -1,3 +1,5 @@
+'use client'
+
 import { ChevronRight, MessageCircle } from 'lucide-react'
 import { useTelegramUser, openSupport } from '../telegram/useTelegram'
 import { PageHeader } from '../components/layout/PageHeader'

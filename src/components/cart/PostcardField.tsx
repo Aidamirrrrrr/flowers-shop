@@ -1,3 +1,5 @@
+'use client'
+
 import { useId, useState } from 'react'
 import { MessageSquare } from 'lucide-react'
 import { useCart } from '../../hooks/useCart'

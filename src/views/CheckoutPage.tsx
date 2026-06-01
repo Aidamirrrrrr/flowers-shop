@@ -1,5 +1,7 @@
+'use client'
+
 import { useRef, useCallback, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useRouter } from 'next/navigation'
 import { useCart } from '../hooks/useCart'
 import { formatPrice, getProductById } from '../data/products'
 import {
@@ -13,7 +15,7 @@ import { showDemoAlert } from '../telegram/useTelegram'
 
 export function CheckoutPage() {
   const { items, total, clearCart } = useCart()
-  const navigate = useNavigate()
+  const router = useRouter()
   const formRef = useRef<CheckoutFormRef>(null)
 
   const handleSubmit = useCallback(() => {
@@ -37,14 +39,14 @@ export function CheckoutPage() {
     showDemoAlert(
       `Заказ принят (демо)!\n\n${data.name}\n${data.phone}\n${data.address}\n${data.datetime}${postcardBlock}`,
     )
-    navigate('/profile')
-  }, [clearCart, navigate, items])
+    router.push('/profile')
+  }, [clearCart, router, items])
 
   useEffect(() => {
     if (items.length === 0) {
-      navigate('/cart', { replace: true })
+      router.replace('/cart')
     }
-  }, [items.length, navigate])
+  }, [items.length, router])
 
   if (items.length === 0) {
     return null

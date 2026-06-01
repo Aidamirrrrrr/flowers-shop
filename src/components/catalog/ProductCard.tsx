@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom'
+'use client'
+
+import Link from 'next/link'
 import type { Product } from '../../data/products'
 import { Price } from '../ui/Price'
 
@@ -8,7 +10,7 @@ type ProductCardProps = {
 
 export function ProductCard({ product }: ProductCardProps) {
   return (
-    <Link to={`/product/${product.id}`} className="product-card">
+    <Link href={`/product/${product.id}`} className="product-card">
       <div className="product-card__image-wrap">
         <img
           src={product.image}

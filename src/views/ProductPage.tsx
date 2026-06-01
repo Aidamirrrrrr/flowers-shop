@@ -1,5 +1,8 @@
+'use client'
+
 import { useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import Link from 'next/link'
+import { useRouter, useParams } from 'next/navigation'
 import { Check, Droplets, ShoppingCart, Truck } from 'lucide-react'
 import { getProductById } from '../data/products'
 import { useCart } from '../hooks/useCart'
@@ -11,7 +14,7 @@ import { hapticImpact } from '../telegram/haptic'
 
 export function ProductPage() {
   const { id } = useParams<{ id: string }>()
-  const navigate = useNavigate()
+  const router = useRouter()
   const { addItem, getQty } = useCart()
   const [justAdded, setJustAdded] = useState(false)
   const [showPostcard, setShowPostcard] = useState(false)
@@ -21,7 +24,7 @@ export function ProductPage() {
     return (
       <div className="empty-state">
         <h2>Товар не найден</h2>
-        <Button variant="outline" onClick={() => navigate('/')}>
+        <Button variant="outline" onClick={() => router.push('/')}>
           На главную
         </Button>
       </div>
@@ -58,7 +61,7 @@ export function ProductPage() {
         <p>{product.careTips}</p>
       </div>
 
-      <Link to="/about#delivery" className="product-page__link">
+      <Link href="/about#delivery" className="product-page__link">
         <Icon icon={Truck} size={16} />
         О доставке и оплате
       </Link>

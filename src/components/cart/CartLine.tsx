@@ -1,3 +1,5 @@
+'use client'
+
 import { Minus, Plus, Trash2 } from 'lucide-react'
 import { hapticImpact, hapticSelection } from '../../telegram/haptic'
 import { getProductById } from '../../data/products'

@@ -1,3 +1,5 @@
+'use client'
+
 import { useMemo } from 'react'
 import { getCartSuggestionProducts } from '../../data/cartSuggestions'
 import { useCart } from '../../hooks/useCart'

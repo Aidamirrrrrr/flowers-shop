@@ -1,5 +1,8 @@
+'use client'
+
 import { ShoppingBag, Truck } from 'lucide-react'
-import { Link, useNavigate } from 'react-router-dom'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useCart } from '../hooks/useCart'
 import { formatPrice } from '../data/products'
 import { CartLine } from '../components/cart/CartLine'
@@ -12,11 +15,11 @@ import { hapticImpact } from '../telegram/haptic'
 
 export function CartPage() {
   const { items, total, itemCount } = useCart()
-  const navigate = useNavigate()
+  const router = useRouter()
 
   const goCheckout = () => {
     hapticImpact('light')
-    navigate('/cart/checkout')
+    router.push('/cart/checkout')
   }
 
   if (items.length === 0) {
@@ -28,14 +31,14 @@ export function CartPage() {
           title="Корзина пуста"
           description="Добавьте букет из каталога — он порадует близких"
           action={
-            <Button variant="primary" onClick={() => navigate('/')}>
+            <Button variant="primary" onClick={() => router.push('/')}>
               В каталог
             </Button>
           }
         />
         <CartSuggestions />
         <p className="cart-empty-link">
-          <Link to="/about">
+          <Link href="/about">
             <Icon icon={Truck} size={14} />
             О доставке и сервисе
           </Link>
@@ -51,7 +54,7 @@ export function CartPage() {
         <CartLine key={item.productId} item={item} />
       ))}
       <p className="cart-empty-link cart-empty-link--in-cart">
-        <Link to="/about">
+        <Link href="/about">
           <Icon icon={Truck} size={14} />
           Доставка от 2 часов · Оплата при получении
         </Link>

@@ -1,5 +1,7 @@
+'use client'
+
 import type { MouseEvent } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { Plus } from 'lucide-react'
 import type { Product } from '../../data/products'
 import { useCart } from '../../hooks/useCart'
@@ -24,7 +26,7 @@ export function SuggestionCard({ product }: SuggestionCardProps) {
 
   return (
     <article className="suggestion-card">
-      <Link to={`/product/${product.id}`} className="suggestion-card__link">
+      <Link href={`/product/${product.id}`} className="suggestion-card__link">
         <img
           src={product.image}
           alt={product.name}
