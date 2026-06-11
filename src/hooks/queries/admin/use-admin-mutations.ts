@@ -69,6 +69,40 @@ export function useUpdateOrderStatusMutation() {
   })
 }
 
+export function useUpdateOrderDeliveryMutation() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({ orderId, deliveryAt }: { orderId: string; deliveryAt: string }) => {
+      const data = await apiJson<{
+        order: {
+          id: string
+          deliveryAt: string
+          deliveryAtLabel: string
+        }
+      }>(`/api/admin/orders/${orderId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ deliveryAt }),
+      })
+      return data.order
+    },
+    onSuccess: () => void invalidateOrders(queryClient),
+  })
+}
+
+export function useDeleteOrderMutation() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (orderId: string) => {
+      await apiJson(`/api/admin/orders/${orderId}`, { method: 'DELETE' })
+      return orderId
+    },
+    onSuccess: () => void invalidateOrders(queryClient),
+  })
+}
+
 export function useSaveProductMutation() {
   const queryClient = useQueryClient()
 

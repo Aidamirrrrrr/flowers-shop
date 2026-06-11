@@ -27,7 +27,7 @@ export function ProductPage() {
   if (catalogLoading && !product) {
     return (
       <div className="space-y-4">
-        <Skeleton className="aspect-square w-[calc(100%+32px)] -mx-4" />
+        <Skeleton className="aspect-square w-[calc(100%+2rem)] -mx-4 max-w-none" />
         <Skeleton className="h-8 w-2/3" />
         <Skeleton className="h-6 w-1/3" />
         <Skeleton className="h-12 w-full" />
@@ -59,11 +59,13 @@ export function ProductPage() {
 
   return (
     <>
-      <img
-        src={product.image}
-        alt={product.name}
-        className="animate-hero-reveal -mx-4 mb-4 aspect-square w-[calc(100%+32px)] bg-muted object-cover"
-      />
+      <div className="-mx-4 mb-4 aspect-square w-[calc(100%+2rem)] max-w-none overflow-hidden bg-muted">
+        <img
+          src={product.image}
+          alt={product.name}
+          className="animate-hero-reveal block h-full w-full object-cover"
+        />
+      </div>
       <h1 className="animate-fade-in-up-delayed mb-2 text-[1.35rem] font-medium tracking-wide">
         {product.name}
       </h1>

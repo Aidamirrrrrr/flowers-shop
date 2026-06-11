@@ -37,6 +37,7 @@ export type AdminOrder = {
   customerName: string
   phone: string
   address: string
+  deliveryAt: string
   deliveryAtLabel: string
   createdAtLabel: string
   total: number

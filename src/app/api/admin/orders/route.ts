@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { requireAdmin } from '@/lib/admin'
-import { formatOrderDate, orderStatusLabel, shortOrderId } from '@/lib/order-labels'
+import { formatOrderDate, formatOrderDateTime, orderStatusLabel, shortOrderId } from '@/lib/order-labels'
 import { prisma } from '@/lib/prisma'
 
 export async function GET() {
@@ -28,7 +28,7 @@ export async function GET() {
       phone: order.phone,
       address: order.address,
       deliveryAt: order.deliveryAt.toISOString(),
-      deliveryAtLabel: formatOrderDate(order.deliveryAt),
+      deliveryAtLabel: formatOrderDateTime(order.deliveryAt),
       createdAtLabel: formatOrderDate(order.createdAt),
       total: order.total,
       items: order.items.map((item) => ({

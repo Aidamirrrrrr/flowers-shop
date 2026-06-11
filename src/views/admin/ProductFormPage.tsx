@@ -134,11 +134,11 @@ export function ProductFormPage({ mode, productId }: ProductFormPageProps) {
   const loading = mode === 'edit' && (productQuery.isPending || !initialized)
 
   if (loading) {
-    return <Skeleton className="aspect-square w-[calc(100%+32px)] -mx-4" />
+    return <Skeleton className="aspect-square w-[calc(100%+2rem)] -mx-4 max-w-none" />
   }
 
   return (
-    <div className="-mx-4 pb-6">
+    <div className="-mx-4 w-[calc(100%+2rem)] max-w-none pb-6">
       <ProductImageUpload previewSrc={previewSrc} onFileSelect={handleImageSelect} />
 
       <div className="mt-4 space-y-4 px-4">

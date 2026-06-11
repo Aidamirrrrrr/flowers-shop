@@ -12,11 +12,9 @@
 @keyframes page-enter {
   from {
     opacity: 0;
-    transform: translateY(14px) scale(0.988);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
   }
 }
 
@@ -44,7 +42,7 @@
 }
 
 @utility animate-page-enter {
-  animation: page-enter var(--duration-page) var(--ease-smooth) both;
+  animation: page-enter 0.28s var(--ease-smooth) both;
 }
 
 @utility animate-fade-in-up {

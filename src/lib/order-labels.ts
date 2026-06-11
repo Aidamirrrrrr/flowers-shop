@@ -14,6 +14,17 @@ export function formatOrderDate(date: Date | string): string {
   })
 }
 
+export function formatOrderDateTime(date: Date | string): string {
+  const d = typeof date === 'string' ? new Date(date) : date
+  return d.toLocaleString('ru-RU', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+}
+
 export function shortOrderId(id: string): string {
   return id.slice(-6).toUpperCase()
 }

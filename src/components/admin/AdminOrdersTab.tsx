@@ -1,10 +1,13 @@
 'use client'
 
-import { RefreshCw } from 'lucide-react'
+import { useState } from 'react'
+import { RefreshCw, Trash2 } from 'lucide-react'
+import { DeliveryDateTimePicker } from '@/components/cart/DeliveryDateTimePicker'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Badge } from '@/components/ui/badge'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
@@ -12,7 +15,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import { formatPrice } from '@/lib/format-price'
+import { isoToPickerValue } from '@/lib/order-datetime'
 import {
   ORDER_STATUS_LABELS,
   orderStatusLabel,
@@ -29,6 +43,9 @@ type AdminOrdersTabProps = {
   refreshing: boolean
   onRefresh: () => void
   onStatusChange: (orderId: string, status: OrderStatusKey) => void
+  onDeliveryChange: (orderId: string, deliveryAt: string) => void
+  onDelete: (orderId: string) => Promise<string | null>
+  updatingDeliveryId?: string | null
 }
 
 export function AdminOrdersTab({
@@ -37,7 +54,29 @@ export function AdminOrdersTab({
   refreshing,
   onRefresh,
   onStatusChange,
+  onDeliveryChange,
+  onDelete,
+  updatingDeliveryId,
 }: AdminOrdersTabProps) {
+  const [deleteId, setDeleteId] = useState<string | null>(null)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
+  const [deleting, setDeleting] = useState(false)
+
+  const orderToDelete = orders.find((o) => o.id === deleteId)
+
+  const confirmDelete = async () => {
+    if (!deleteId) return
+    setDeleting(true)
+    setDeleteError(null)
+    const err = await onDelete(deleteId)
+    setDeleting(false)
+    if (err) {
+      setDeleteError(err)
+      return
+    }
+    setDeleteId(null)
+  }
+
   if (loading) {
     return <Skeleton className="h-40 w-full rounded-lg" />
   }
@@ -62,6 +101,10 @@ export function AdminOrdersTab({
         </Button>
       </div>
 
+      {deleteError && (
+        <p className="text-sm text-destructive">{deleteError}</p>
+      )}
+
       {orders.length === 0 ? (
         <Card className="border-dashed shadow-none">
           <CardContent className="p-6 text-center text-sm text-muted-foreground">
@@ -80,7 +123,22 @@ export function AdminOrdersTab({
                   <CardTitle className="text-base">№{order.shortId}</CardTitle>
                   {order.status === 'NEW' && <Badge>Новый</Badge>}
                 </div>
-                <span className="shrink-0 text-xs text-muted-foreground">{order.createdAtLabel}</span>
+                <div className="flex shrink-0 items-center gap-1">
+                  <span className="text-xs text-muted-foreground">{order.createdAtLabel}</span>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-muted-foreground"
+                    aria-label="Удалить заказ"
+                    onClick={() => {
+                      setDeleteError(null)
+                      setDeleteId(order.id)
+                    }}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
             </CardHeader>
             <CardContent className="space-y-3 text-sm">
@@ -92,7 +150,6 @@ export function AdminOrdersTab({
               )}
               <p className="text-muted-foreground">{order.address}</p>
               <p>
-                Доставка: {order.deliveryAtLabel} ·{' '}
                 <strong className="text-foreground">{formatPrice(order.total)}</strong>
               </p>
               <ul className="list-inside list-disc space-y-1 text-muted-foreground">
@@ -103,6 +160,20 @@ export function AdminOrdersTab({
                   </li>
                 ))}
               </ul>
+
+              <div className="space-y-2">
+                <Label className="text-xs text-muted-foreground">Дата и время доставки</Label>
+                <DeliveryDateTimePicker
+                  value={isoToPickerValue(order.deliveryAt)}
+                  onChange={(value) => onDeliveryChange(order.id, value)}
+                  allowPastDates
+                  showHint={false}
+                />
+                {updatingDeliveryId === order.id && (
+                  <p className="text-xs text-muted-foreground">Сохраняем…</p>
+                )}
+              </div>
+
               <Select
                 value={order.status}
                 onValueChange={(value) => onStatusChange(order.id, value as OrderStatusKey)}
@@ -122,6 +193,31 @@ export function AdminOrdersTab({
           </Card>
         ))
       )}
+
+      <AlertDialog open={Boolean(deleteId)} onOpenChange={(open) => !open && setDeleteId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Удалить заказ?</AlertDialogTitle>
+            <AlertDialogDescription>
+              {orderToDelete
+                ? `Заказ №${orderToDelete.shortId} от ${orderToDelete.customerName} будет удалён безвозвратно.`
+                : 'Заказ будет удалён.'}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>Отмена</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={deleting}
+              onClick={(e) => {
+                e.preventDefault()
+                void confirmDelete()
+              }}
+            >
+              {deleting ? 'Удаляем…' : 'Удалить'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

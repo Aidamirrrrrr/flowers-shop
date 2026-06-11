@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
 import { formatOrderDate, orderStatusLabel, shortOrderId } from '@/lib/order-labels'
+import { notifyAdminsNewOrder } from '@/lib/notify-admins'
 import { prisma } from '@/lib/prisma'
 
 type OrderItemInput = {
@@ -116,6 +117,19 @@ export async function POST(request: Request) {
         items: { include: { product: { select: { name: true } } } },
       },
     })
+
+    void notifyAdminsNewOrder({
+      id: order.id,
+      customerName: order.customerName,
+      phone: order.phone,
+      address: order.address,
+      deliveryAt: order.deliveryAt,
+      total: order.total,
+      items: order.items.map((item) => ({
+        name: item.product.name,
+        quantity: item.quantity,
+      })),
+    }).catch((err) => console.error('[orders POST] notify admins', err))
 
     return NextResponse.json({
       order: {

@@ -5,6 +5,9 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import { PhoneInput } from '@/components/ui/phone-input'
+import { DeliveryDateTimePicker } from '@/components/cart/DeliveryDateTimePicker'
+import { isValidPhone, normalizePhone } from '@/lib/phone-mask'
 
 export type CheckoutData = {
   name: string
@@ -30,7 +33,7 @@ export const CheckoutForm = forwardRef<CheckoutFormRef>(function CheckoutForm(_,
         setError('Укажите имя получателя')
         return null
       }
-      if (!phone.trim() || phone.trim().length < 6) {
+      if (!isValidPhone(phone)) {
         setError('Укажите корректный телефон')
         return null
       }
@@ -43,7 +46,12 @@ export const CheckoutForm = forwardRef<CheckoutFormRef>(function CheckoutForm(_,
         return null
       }
       setError('')
-      return { name: name.trim(), phone: phone.trim(), address: address.trim(), datetime }
+      return {
+        name: name.trim(),
+        phone: normalizePhone(phone),
+        address: address.trim(),
+        datetime,
+      }
     },
   }))
 
@@ -66,13 +74,10 @@ export const CheckoutForm = forwardRef<CheckoutFormRef>(function CheckoutForm(_,
       </div>
       <div className="space-y-2">
         <Label htmlFor="checkout-phone">Телефон</Label>
-        <Input
+        <PhoneInput
           id="checkout-phone"
-          type="tel"
           value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          placeholder="+7 900 000-00-00"
-          autoComplete="tel"
+          onChange={setPhone}
         />
       </div>
       <div className="space-y-2">
@@ -87,11 +92,10 @@ export const CheckoutForm = forwardRef<CheckoutFormRef>(function CheckoutForm(_,
       </div>
       <div className="space-y-2">
         <Label htmlFor="checkout-datetime">Дата и время</Label>
-        <Input
+        <DeliveryDateTimePicker
           id="checkout-datetime"
-          type="datetime-local"
           value={datetime}
-          onChange={(e) => setDatetime(e.target.value)}
+          onChange={setDatetime}
         />
       </div>
     </form>
