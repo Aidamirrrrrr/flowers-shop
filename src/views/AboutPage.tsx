@@ -1,4 +1,9 @@
-import { BRAND_NAME } from '../constants/brand'
+import {
+  BRAND_NAME,
+  BUSINESS_HOURS_LABEL,
+  BUSINESS_PHONE,
+  BUSINESS_PHONE_HREF,
+} from '../constants/brand'
 import { PageHeader } from '../components/layout/PageHeader'
 
 const sectionClass = 'mb-6'
@@ -45,8 +50,13 @@ export function AboutPage() {
 
       <section className={sectionClass}>
         <h2 className={headingClass}>Контакты</h2>
-        <p className={textClass}>Ежедневно с 9:00 до 21:00</p>
-        <p className={textClass}>+7 (900) 000-00-00 · hello@elementconcept.ru</p>
+        <p className={textClass}>{BUSINESS_HOURS_LABEL}</p>
+        <p className={textClass}>
+          Рабочий номер:{' '}
+          <a href={BUSINESS_PHONE_HREF} className="text-foreground underline-offset-4 hover:underline">
+            {BUSINESS_PHONE}
+          </a>
+        </p>
       </section>
     </>
   )

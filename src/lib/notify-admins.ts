@@ -37,13 +37,13 @@ export async function notifyAdminsNewOrder(order: NewOrderPayload) {
     .join('\n')
 
   const text = [
-    `🌸 Новый заказ №${shortId}`,
+    `Новый заказ №${shortId}`,
     '',
-    `👤 ${order.customerName}`,
-    `📞 ${order.phone}`,
-    `📍 ${order.address}`,
-    `🕐 ${formatOrderDateTime(order.deliveryAt)}`,
-    `💰 ${formatPrice(order.total)}`,
+    `Имя: ${order.customerName}`,
+    `Телефон: ${order.phone}`,
+    `Адрес: ${order.address}`,
+    `Доставка: ${formatOrderDateTime(order.deliveryAt)}`,
+    `Сумма: ${formatPrice(order.total)}`,
     '',
     itemsLines,
   ].join('\n')

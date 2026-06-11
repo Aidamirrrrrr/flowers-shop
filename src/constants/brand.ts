@@ -1,2 +1,6 @@
 export const BRAND_NAME = 'ELEMENT CONCEPT'
 export const TELEGRAM_CHANNEL_URL = 'https://t.me/elementbymosk'
+export const BUSINESS_HOURS_LABEL = 'Работа с 10:00 до 20:00'
+export const BUSINESS_PHONE = '+7 (916) 746-86-68'
+export const BUSINESS_PHONE_HREF = 'tel:+79167468668'
+export const DELIVERY_HOURS_HINT = 'Доставка с 10:00 до 20:00'

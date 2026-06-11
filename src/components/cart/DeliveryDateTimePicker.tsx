@@ -10,6 +10,7 @@ import { Calendar } from '@/components/ui/calendar'
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { DELIVERY_HOURS_HINT } from '@/constants/brand'
 import { cn } from '@/lib/utils'
 
 function parsePickerValue(value: string): { date?: Date; time: string } {
@@ -116,6 +117,8 @@ export function DeliveryDateTimePicker({
             id={id ? `${id}-time` : undefined}
             type="time"
             step={1800}
+            min="10:00"
+            max="20:00"
             value={time}
             onChange={(e) => setTime(e.target.value)}
             className="appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
@@ -123,7 +126,7 @@ export function DeliveryDateTimePicker({
         </Field>
       </FieldGroup>
       {showHint && (
-        <p className="text-xs text-muted-foreground">Доставка с 9:00 до 21:00</p>
+        <p className="text-xs text-muted-foreground">{DELIVERY_HOURS_HINT}</p>
       )}
     </div>
   )

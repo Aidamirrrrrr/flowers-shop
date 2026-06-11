@@ -74,7 +74,7 @@ async function main() {
     create: {
       id: 'default',
       deliveryText: 'Доставка от 2 часов · Оплата при получении',
-      deliveryHours: '9:00–21:00',
+      deliveryHours: '10:00–20:00',
     },
     update: {},
   })
