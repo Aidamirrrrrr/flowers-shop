@@ -2,6 +2,8 @@
 
 import { useRef, useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useQueryClient } from '@tanstack/react-query'
+import { invalidateOrders } from '@/lib/query/invalidate'
 import { useCart } from '@/hooks/useCart'
 import { formatPrice } from '@/lib/format-price'
 import {
@@ -18,6 +20,7 @@ import { getWebApp } from '@/telegram/webApp'
 export function CheckoutPage() {
   const { items, total, clearCart } = useCart()
   const router = useRouter()
+  const queryClient = useQueryClient()
   const formRef = useRef<CheckoutFormRef>(null)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -69,6 +72,7 @@ export function CheckoutPage() {
       }
 
       hapticNotification('success')
+      await invalidateOrders(queryClient)
       clearCart()
       showDemoAlert(
         `Заказ №${payload.order!.shortId} принят!\n\nОплата при получении.\nСумма: ${formatPrice(payload.order!.total)}\nДоставка: ${payload.order!.deliveryAt}`,
@@ -80,7 +84,7 @@ export function CheckoutPage() {
     } finally {
       setSubmitting(false)
     }
-  }, [clearCart, router, items])
+  }, [clearCart, queryClient, router, items])
 
   useEffect(() => {
     if (items.length === 0) {

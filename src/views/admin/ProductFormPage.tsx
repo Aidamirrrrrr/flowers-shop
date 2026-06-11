@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
-import type { AdminCategory, ProductFormValues } from '@/types/admin'
+import type { ProductFormValues } from '@/types/admin'
 import { EMPTY_PRODUCT_FORM } from '@/types/admin'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Button } from '@/components/ui/button'
@@ -21,7 +21,9 @@ import {
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Switch } from '@/components/ui/switch'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useCatalogContext } from '@/context/CatalogContext'
+import { useAdminProductQuery } from '@/hooks/queries/admin/use-admin-products-query'
+import { useAdminCategoriesQuery } from '@/hooks/queries/admin/use-admin-categories-query'
+import { useSaveProductMutation } from '@/hooks/queries/admin/use-admin-mutations'
 
 type ProductFormPageProps = {
   mode: 'create' | 'edit'
@@ -45,14 +47,14 @@ async function uploadProductImage(file: File): Promise<string> {
 
 export function ProductFormPage({ mode, productId }: ProductFormPageProps) {
   const router = useRouter()
-  const { refresh: refreshCatalog } = useCatalogContext()
-  const [categories, setCategories] = useState<AdminCategory[]>([])
+  const saveProduct = useSaveProductMutation()
+  const { data: categories = [] } = useAdminCategoriesQuery()
+  const productQuery = useAdminProductQuery(productId, mode === 'edit')
   const [form, setForm] = useState<ProductFormValues>(EMPTY_PRODUCT_FORM)
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
-  const [loading, setLoading] = useState(mode === 'edit')
-  const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [initialized, setInitialized] = useState(mode === 'create')
 
   useEffect(() => {
     return () => {
@@ -61,46 +63,33 @@ export function ProductFormPage({ mode, productId }: ProductFormPageProps) {
   }, [imagePreview])
 
   useEffect(() => {
-    fetch('/api/admin/categories', { credentials: 'include' })
-      .then((res) => res.json())
-      .then((data: { categories: AdminCategory[] }) => setCategories(data.categories ?? []))
-      .catch(() => setCategories([]))
-  }, [])
+    if (mode === 'create' && categories.length > 0) {
+      setForm((prev) => ({ ...prev, categoryId: prev.categoryId || categories[0].id }))
+      setInitialized(true)
+    }
+  }, [mode, categories])
 
   useEffect(() => {
-    if (mode === 'create') {
-      if (categories.length > 0) {
-        setForm((prev) => ({ ...prev, categoryId: prev.categoryId || categories[0].id }))
-      }
-      return
+    if (mode !== 'edit' || !productQuery.data) return
+    const p = productQuery.data
+    setForm({
+      name: p.name,
+      price: String(p.price),
+      image: p.image,
+      categoryId: p.categoryId,
+      description: p.description,
+      careTips: p.careTips,
+      active: p.active,
+    })
+    setImagePreview(p.image)
+    setInitialized(true)
+  }, [mode, productQuery.data])
+
+  useEffect(() => {
+    if (productQuery.error) {
+      setError(productQuery.error instanceof Error ? productQuery.error.message : 'Ошибка загрузки')
     }
-
-    if (!productId) return
-
-    setLoading(true)
-    fetch(`/api/admin/products/${productId}`, { credentials: 'include' })
-      .then(async (res) => {
-        if (!res.ok) throw new Error('Не удалось загрузить товар')
-        const data = (await res.json()) as {
-          product: ProductFormValues & { price: number; image: string }
-        }
-        const p = data.product
-        setForm({
-          name: p.name,
-          price: String(p.price),
-          image: p.image,
-          categoryId: p.categoryId,
-          description: p.description,
-          careTips: p.careTips,
-          active: p.active,
-        })
-        setImagePreview(p.image)
-      })
-      .catch((err) => {
-        setError(err instanceof Error ? err.message : 'Ошибка загрузки')
-      })
-      .finally(() => setLoading(false))
-  }, [mode, productId, categories.length])
+  }, [productQuery.error])
 
   const update = <K extends keyof ProductFormValues>(key: K, value: ProductFormValues[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }))
@@ -115,7 +104,6 @@ export function ProductFormPage({ mode, productId }: ProductFormPageProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setSaving(true)
     setError(null)
 
     try {
@@ -136,27 +124,15 @@ export function ProductFormPage({ mode, productId }: ProductFormPageProps) {
         active: form.active,
       }
 
-      const url = mode === 'create' ? '/api/admin/products' : `/api/admin/products/${productId}`
-      const res = await fetch(url, {
-        method: mode === 'create' ? 'POST' : 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(payload),
-      })
-      const data = (await res.json()) as { error?: string }
-      if (!res.ok) {
-        throw new Error(data.error ?? 'Не удалось сохранить')
-      }
-      await refreshCatalog()
+      await saveProduct.mutateAsync({ mode, productId, payload })
       router.push('/admin/products')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Ошибка сохранения')
-    } finally {
-      setSaving(false)
     }
   }
 
   const previewSrc = imagePreview ?? (form.image || null)
+  const loading = mode === 'edit' && (productQuery.isPending || !initialized)
 
   if (loading) {
     return <Skeleton className="h-40 w-full" />
@@ -274,8 +250,8 @@ export function ProductFormPage({ mode, productId }: ProductFormPageProps) {
           <Button type="button" variant="outline" className="flex-1" asChild>
             <Link href="/admin/products">Отмена</Link>
           </Button>
-          <Button type="submit" className="flex-1" disabled={saving}>
-            {saving ? 'Сохраняем…' : mode === 'create' ? 'Создать' : 'Сохранить'}
+          <Button type="submit" className="flex-1" disabled={saveProduct.isPending}>
+            {saveProduct.isPending ? 'Сохраняем…' : mode === 'create' ? 'Создать' : 'Сохранить'}
           </Button>
         </div>
       </form>

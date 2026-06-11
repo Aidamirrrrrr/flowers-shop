@@ -1,46 +1,27 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
+import { useCallback, useMemo } from 'react'
 import type { CatalogInitial } from '@/context/CatalogContext'
-import type { CatalogCategory, CatalogProduct } from '@/types/catalog'
+import { defaultCategories, useCategoriesQuery } from '@/hooks/queries/use-categories-query'
+import { useProductsQuery } from '@/hooks/queries/use-products-query'
+import { invalidateCatalog } from '@/lib/query/invalidate'
 
 export function useCatalog(initial?: CatalogInitial) {
-  const [products, setProducts] = useState<CatalogProduct[]>(initial?.products ?? [])
-  const [categories, setCategories] = useState<CatalogCategory[]>(
-    initial?.categories ?? [{ id: 'all', label: 'Все' }],
-  )
-  const [loading, setLoading] = useState(!(initial?.products && initial.products.length > 0))
-  const [error, setError] = useState<string | null>(null)
+  const queryClient = useQueryClient()
+  const productsQuery = useProductsQuery(initial?.products)
+  const categoriesQuery = useCategoriesQuery(initial?.categories)
+
+  const products = productsQuery.data ?? []
+  const categories = categoriesQuery.data ?? defaultCategories
+  const loading = productsQuery.isPending || categoriesQuery.isPending
+  const error =
+    (productsQuery.error instanceof Error ? productsQuery.error.message : null) ??
+    (categoriesQuery.error instanceof Error ? categoriesQuery.error.message : null)
 
   const refresh = useCallback(async () => {
-    if (initial?.products?.length) {
-      setLoading(false)
-    } else {
-      setLoading(true)
-    }
-    setError(null)
-    try {
-      const [productsRes, categoriesRes] = await Promise.all([
-        fetch('/api/products'),
-        fetch('/api/categories'),
-      ])
-      if (!productsRes.ok || !categoriesRes.ok) {
-        throw new Error('Не удалось загрузить каталог')
-      }
-      const productsData = (await productsRes.json()) as { products: CatalogProduct[] }
-      const categoriesData = (await categoriesRes.json()) as { categories: CatalogCategory[] }
-      setProducts(productsData.products)
-      setCategories(categoriesData.categories)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Ошибка загрузки')
-    } finally {
-      setLoading(false)
-    }
-  }, [initial?.products?.length])
-
-  useEffect(() => {
-    void refresh()
-  }, [refresh])
+    await invalidateCatalog(queryClient)
+  }, [queryClient])
 
   const productMap = useMemo(
     () => new Map(products.map((p) => [p.id, p])),

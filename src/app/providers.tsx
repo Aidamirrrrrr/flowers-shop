@@ -1,7 +1,8 @@
 'use client'
 
 import '@/telegram/initDevMock'
+import { QueryProvider } from '@/components/providers/QueryProvider'
 
 export function Providers({ children }: { children: React.ReactNode }) {
-  return children
+  return <QueryProvider>{children}</QueryProvider>
 }

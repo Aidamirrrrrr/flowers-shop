@@ -1,23 +1,14 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
-import type { CatalogProduct } from '@/types/catalog'
+import { useMemo } from 'react'
 import { useCart } from '@/hooks/useCart'
+import { useCartSuggestionsQuery } from '@/hooks/queries/use-cart-suggestions-query'
 import { SuggestionCard } from './SuggestionCard'
 import { Skeleton } from '@/components/ui/skeleton'
 
 export function CartSuggestions() {
   const { items } = useCart()
-  const [suggestions, setSuggestions] = useState<CatalogProduct[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    fetch('/api/cart-suggestions')
-      .then((res) => res.json())
-      .then((data: { products: CatalogProduct[] }) => setSuggestions(data.products ?? []))
-      .catch(() => setSuggestions([]))
-      .finally(() => setLoading(false))
-  }, [])
+  const { data: suggestions = [], isPending: loading } = useCartSuggestionsQuery()
 
   const visible = useMemo(() => {
     const inCart = new Set(items.map((i) => i.productId))

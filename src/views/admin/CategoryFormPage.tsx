@@ -12,7 +12,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useCatalogContext } from '@/context/CatalogContext'
+import { useAdminCategoryQuery } from '@/hooks/queries/admin/use-admin-categories-query'
+import { useSaveCategoryMutation } from '@/hooks/queries/admin/use-admin-mutations'
 
 type CategoryFormPageProps = {
   mode: 'create' | 'edit'
@@ -21,36 +22,31 @@ type CategoryFormPageProps = {
 
 export function CategoryFormPage({ mode, categoryId }: CategoryFormPageProps) {
   const router = useRouter()
-  const { refresh: refreshCatalog } = useCatalogContext()
+  const saveCategory = useSaveCategoryMutation()
+  const categoryQuery = useAdminCategoryQuery(categoryId, mode === 'edit')
   const [form, setForm] = useState<CategoryFormValues>(EMPTY_CATEGORY_FORM)
-  const [loading, setLoading] = useState(mode === 'edit')
-  const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [initialized, setInitialized] = useState(mode === 'create')
 
   useEffect(() => {
-    if (mode === 'create') return
-    if (!categoryId) return
+    if (mode !== 'edit' || !categoryQuery.data) return
+    setForm({
+      label: categoryQuery.data.label,
+      sort: String(categoryQuery.data.sort),
+    })
+    setInitialized(true)
+  }, [mode, categoryQuery.data])
 
-    setLoading(true)
-    fetch('/api/admin/categories', { credentials: 'include' })
-      .then(async (res) => {
-        if (!res.ok) throw new Error('Не удалось загрузить категорию')
-        const data = (await res.json()) as {
-          categories: { id: string; label: string; sort: number }[]
-        }
-        const category = data.categories.find((c) => c.id === categoryId)
-        if (!category) throw new Error('Категория не найдена')
-        setForm({ label: category.label, sort: String(category.sort) })
-      })
-      .catch((err) => {
-        setError(err instanceof Error ? err.message : 'Ошибка загрузки')
-      })
-      .finally(() => setLoading(false))
-  }, [mode, categoryId])
+  useEffect(() => {
+    if (categoryQuery.error) {
+      setError(
+        categoryQuery.error instanceof Error ? categoryQuery.error.message : 'Ошибка загрузки',
+      )
+    }
+  }, [categoryQuery.error])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setSaving(true)
     setError(null)
 
     const payload: Record<string, unknown> = { label: form.label.trim() }
@@ -59,25 +55,14 @@ export function CategoryFormPage({ mode, categoryId }: CategoryFormPageProps) {
     }
 
     try {
-      const url = mode === 'create' ? '/api/admin/categories' : `/api/admin/categories/${categoryId}`
-      const res = await fetch(url, {
-        method: mode === 'create' ? 'POST' : 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(payload),
-      })
-      const data = (await res.json()) as { error?: string }
-      if (!res.ok) {
-        throw new Error(data.error ?? 'Не удалось сохранить')
-      }
-      await refreshCatalog()
+      await saveCategory.mutateAsync({ mode, categoryId, payload })
       router.push('/admin/categories')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Ошибка сохранения')
-    } finally {
-      setSaving(false)
     }
   }
+
+  const loading = mode === 'edit' && (categoryQuery.isPending || !initialized)
 
   if (loading) {
     return <Skeleton className="h-40 w-full" />
@@ -130,8 +115,8 @@ export function CategoryFormPage({ mode, categoryId }: CategoryFormPageProps) {
           <Button type="button" variant="outline" className="flex-1" asChild>
             <Link href="/admin/categories">Отмена</Link>
           </Button>
-          <Button type="submit" className="flex-1" disabled={saving}>
-            {saving ? 'Сохраняем…' : mode === 'create' ? 'Создать' : 'Сохранить'}
+          <Button type="submit" className="flex-1" disabled={saveCategory.isPending}>
+            {saveCategory.isPending ? 'Сохраняем…' : mode === 'create' ? 'Создать' : 'Сохранить'}
           </Button>
         </div>
       </form>

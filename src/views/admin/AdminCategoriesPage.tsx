@@ -1,53 +1,32 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
 import { AdminCategoriesTab } from '@/components/admin/AdminCategoriesTab'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { useCatalogContext } from '@/context/CatalogContext'
-import type { AdminCategory } from '@/types/admin'
+import { ApiError } from '@/lib/query/fetch'
+import { useAdminCategoriesQuery } from '@/hooks/queries/admin/use-admin-categories-query'
+import { useDeleteCategoryMutation } from '@/hooks/queries/admin/use-admin-mutations'
 
 export function AdminCategoriesPage() {
-  const { refresh: refreshCatalog } = useCatalogContext()
-  const [categories, setCategories] = useState<AdminCategory[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const { data: categories = [], isPending: loading, error } = useAdminCategoriesQuery()
+  const deleteCategoryMutation = useDeleteCategoryMutation()
 
-  const loadCategories = useCallback(async () => {
-    setLoading(true)
-    try {
-      const res = await fetch('/api/admin/categories', { credentials: 'include' })
-      if (!res.ok) throw new Error('Нет доступа к категориям')
-      const data = (await res.json()) as { categories: AdminCategory[] }
-      setCategories(data.categories)
-      setError(null)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Ошибка загрузки')
-    } finally {
-      setLoading(false)
-    }
-  }, [])
-
-  useEffect(() => {
-    void loadCategories()
-  }, [loadCategories])
+  const errorMessage = error instanceof Error ? error.message : null
 
   const deleteCategory = async (categoryId: string): Promise<string | null> => {
-    const res = await fetch(`/api/admin/categories/${categoryId}`, {
-      method: 'DELETE',
-      credentials: 'include',
-    })
-    const data = (await res.json()) as { error?: string }
-    if (!res.ok) return data.error ?? 'Не удалось удалить категорию'
-    setCategories((prev) => prev.filter((c) => c.id !== categoryId))
-    void refreshCatalog()
-    return null
+    try {
+      await deleteCategoryMutation.mutateAsync(categoryId)
+      return null
+    } catch (err) {
+      if (err instanceof ApiError) return err.message
+      return 'Не удалось удалить категорию'
+    }
   }
 
   return (
     <div className="mt-4 space-y-4">
-      {error && (
+      {errorMessage && (
         <Alert variant="destructive">
-          <AlertDescription>{error}</AlertDescription>
+          <AlertDescription>{errorMessage}</AlertDescription>
         </Alert>
       )}
       <AdminCategoriesTab
