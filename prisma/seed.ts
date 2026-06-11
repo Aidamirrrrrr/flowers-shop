@@ -47,6 +47,23 @@ async function main() {
     })
   }
 
+  await prisma.user.upsert({
+    where: { telegramId: BigInt(100001) },
+    create: {
+      telegramId: BigInt(100001),
+      username: 'demo_flowers',
+      firstName: 'Анна',
+      lastName: 'Демо',
+      role: 'ADMIN',
+    },
+    update: {
+      username: 'demo_flowers',
+      firstName: 'Анна',
+      lastName: 'Демо',
+      role: 'ADMIN',
+    },
+  })
+
   await prisma.appSettings.upsert({
     where: { id: 'default' },
     create: {

@@ -1,12 +1,13 @@
 'use client'
 
 import { Minus, Plus, Trash2 } from 'lucide-react'
-import { hapticImpact, hapticSelection } from '../../telegram/haptic'
-import { getProductById } from '../../data/products'
-import { useCart } from '../../hooks/useCart'
-import type { CartItem } from '../../context/cart-context'
-import { Price } from '../ui/Price'
-import { Icon } from '../ui/Icon'
+import { hapticImpact, hapticSelection } from '@/telegram/haptic'
+import { useCatalogContext } from '@/context/CatalogContext'
+import { useCart } from '@/hooks/useCart'
+import type { CartItem } from '@/context/cart-context'
+import { Price } from '@/components/ui/Price'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
 type CartLineProps = {
   item: CartItem
@@ -14,64 +15,76 @@ type CartLineProps = {
 
 export function CartLine({ item }: CartLineProps) {
   const { updateQty, removeItem } = useCart()
-  const product = getProductById(item.productId)
+  const { getProduct } = useCatalogContext()
+  const product = getProduct(item.productId)
 
   if (!product) return null
 
   return (
-    <div className="cart-line">
-      <img
-        src={product.image}
-        alt={product.name}
-        className="cart-line__image"
-        loading="lazy"
-      />
-      <div className="cart-line__info">
-        <h3 className="cart-line__name">{product.name}</h3>
-        <Price value={product.price * item.quantity} />
-        <div className="cart-line__qty">
-          <button
-            type="button"
-            className="qty-btn"
-            aria-label="Уменьшить количество"
-            onClick={() => {
-              hapticSelection()
-              updateQty(item.productId, item.quantity - 1)
-            }}
-          >
-            <Icon icon={Minus} size={16} />
-          </button>
-          <span>{item.quantity}</span>
-          <button
-            type="button"
-            className="qty-btn"
-            aria-label="Увеличить количество"
-            onClick={() => {
-              hapticSelection()
-              updateQty(item.productId, item.quantity + 1)
-            }}
-          >
-            <Icon icon={Plus} size={16} />
-          </button>
-          <button
-            type="button"
-            className="link-inline cart-line__remove"
-            onClick={() => {
-              hapticImpact('light')
-              removeItem(item.productId)
-            }}
-            aria-label="Удалить"
-          >
-            <Icon icon={Trash2} size={16} />
-          </button>
+    <Card>
+      <CardContent className="flex gap-3 p-3">
+        <div className="h-20 w-20 shrink-0 overflow-hidden rounded-md bg-muted">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="h-full w-full object-cover"
+            loading="lazy"
+          />
         </div>
-        {item.postcardText && (
-          <p className="cart-line__postcard">
-            <span className="cart-line__postcard-label">Открытка:</span>{' '}
-            {item.postcardText}
-          </p>
-        )}
-      </div>
-    </div>
+        <div className="min-w-0 flex-1">
+          <h3 className="line-clamp-2 text-sm font-medium leading-snug">{product.name}</h3>
+          <div className="mt-1">
+            <Price value={product.price * item.quantity} />
+          </div>
+          <div className="mt-2 flex items-center gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              className="h-8 w-8"
+              aria-label="Уменьшить"
+              onClick={() => {
+                hapticSelection()
+                updateQty(item.productId, item.quantity - 1)
+              }}
+            >
+              <Minus className="h-4 w-4" />
+            </Button>
+            <span className="min-w-6 text-center text-sm font-medium">{item.quantity}</span>
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              className="h-8 w-8"
+              aria-label="Увеличить"
+              onClick={() => {
+                hapticSelection()
+                updateQty(item.productId, item.quantity + 1)
+              }}
+            >
+              <Plus className="h-4 w-4" />
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="ml-auto h-8 w-8 text-muted-foreground"
+              onClick={() => {
+                hapticImpact('light')
+                removeItem(item.productId)
+              }}
+              aria-label="Удалить"
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
+          {item.postcardText && (
+            <p className="mt-2 text-xs text-muted-foreground">
+              <span className="font-medium text-foreground">Открытка:</span> {item.postcardText}
+            </p>
+          )}
+        </div>
+      </CardContent>
+    </Card>
   )
 }

@@ -1,23 +1,23 @@
 'use client'
 
-import type { MouseEvent } from 'react'
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
-import type { Product } from '../../data/products'
-import { useCart } from '../../hooks/useCart'
-import { Price } from '../ui/Price'
-import { Icon } from '../ui/Icon'
-import { hapticImpact } from '../../telegram/haptic'
+import type { CatalogProduct } from '@/types/catalog'
+import { useCart } from '@/hooks/useCart'
+import { Price } from '@/components/ui/Price'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import { hapticImpact } from '@/telegram/haptic'
+import { Icon } from '@/components/ui/Icon'
 
 type SuggestionCardProps = {
-  product: Product
+  product: CatalogProduct
 }
 
 export function SuggestionCard({ product }: SuggestionCardProps) {
-  const { addItem, getQty } = useCart()
-  const qty = getQty(product.id)
+  const { addItem } = useCart()
 
-  const handleAdd = (e: MouseEvent) => {
+  const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
     addItem(product.id)
@@ -25,27 +25,24 @@ export function SuggestionCard({ product }: SuggestionCardProps) {
   }
 
   return (
-    <article className="suggestion-card">
-      <Link href={`/product/${product.id}`} className="suggestion-card__link">
+    <Link href={`/product/${product.id}`} className="block w-[148px] shrink-0 snap-start">
+      <Card className="gap-0 overflow-hidden py-0 shadow-none">
         <img
           src={product.image}
           alt={product.name}
-          className="suggestion-card__image"
+          className="aspect-square w-full bg-muted object-cover"
           loading="lazy"
         />
-        <div className="suggestion-card__body">
-          <h3 className="suggestion-card__name">{product.name}</h3>
-          <Price value={product.price} />
+        <div className="p-2">
+          <p className="mb-1 line-clamp-2 text-xs font-semibold leading-tight">{product.name}</p>
+          <div className="flex items-center justify-between gap-2">
+            <Price value={product.price} />
+            <Button type="button" size="icon" className="h-8 w-8" onClick={handleAdd}>
+              <Icon icon={Plus} size={16} />
+            </Button>
+          </div>
         </div>
-      </Link>
-      <button
-        type="button"
-        className="suggestion-card__add"
-        aria-label={qty > 0 ? `В корзине: ${qty}` : 'Добавить в корзину'}
-        onClick={handleAdd}
-      >
-        {qty > 0 ? <span className="suggestion-card__qty">{qty}</span> : <Icon icon={Plus} size={18} />}
-      </button>
-    </article>
+      </Card>
+    </Link>
   )
 }

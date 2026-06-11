@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation'
 import { DevTelegramBar } from '@/telegram/DevTelegramBar'
 import { useTelegramBackButton, useTelegramInit } from '@/telegram/useTelegram'
 import { TabBar } from './TabBar'
+import { cn } from '@/lib/utils'
 
 const HIDE_TAB_PREFIXES = ['/product/', '/cart/checkout']
 
@@ -19,19 +20,19 @@ export function ShopShell({ children }: { children: React.ReactNode }) {
   const hideTab = shouldHideTabBar(pathname)
   const isCheckout = pathname === '/cart/checkout'
 
-  const mainClass = [
-    'app-main',
-    hideTab ? 'app-main--no-tab' : '',
-    isCheckout ? 'app-main--checkout' : '',
-  ]
-    .filter(Boolean)
-    .join(' ')
-
   return (
-    <div className="app-shell">
+    <div className="mx-auto flex min-h-dvh w-full max-w-[var(--app-max-width)] flex-col bg-background">
       <DevTelegramBar />
-      <main className={mainClass}>
-        <div key={pathname} className="page-enter">
+      <main
+        className={cn(
+          'flex-1 px-4 pt-3',
+          hideTab
+            ? 'pb-[calc(env(safe-area-inset-bottom,0px)+16px)]'
+            : 'pb-[calc(56px+env(safe-area-inset-bottom,0px)+16px)]',
+          isCheckout && 'pb-[calc(80px+env(safe-area-inset-bottom,0px)+16px)]',
+        )}
+      >
+        <div key={pathname} className="animate-fade-in-up">
           {children}
         </div>
       </main>

@@ -1,29 +1,43 @@
-import { CATEGORIES, type ProductCategory } from '../../data/products'
-import { hapticSelection } from '../../telegram/haptic'
+'use client'
+
+import type { CatalogCategory } from '@/types/catalog'
+import { Button } from '@/components/ui/button'
+import { hapticSelection } from '@/telegram/haptic'
+import { cn } from '@/lib/utils'
 
 type CategoryChipsProps = {
-  selected: ProductCategory
-  onChange: (category: ProductCategory) => void
+  categories: CatalogCategory[]
+  selected: string
+  onChange: (categoryId: string) => void
 }
 
-export function CategoryChips({ selected, onChange }: CategoryChipsProps) {
+export function CategoryChips({ categories, selected, onChange }: CategoryChipsProps) {
   return (
-    <div className="category-chips" role="tablist" aria-label="Категории">
-      {CATEGORIES.map((cat) => (
-        <button
-          key={cat.id}
-          type="button"
-          role="tab"
-          aria-selected={selected === cat.id}
-          className={`chip${selected === cat.id ? ' chip--active' : ''}`}
-          onClick={() => {
-            hapticSelection()
-            onChange(cat.id)
-          }}
-        >
-          {cat.label}
-        </button>
-      ))}
+    <div
+      className="mb-4 flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      role="tablist"
+      aria-label="Категории"
+    >
+      {categories.map((cat) => {
+        const active = selected === cat.id
+        return (
+          <Button
+            key={cat.id}
+            type="button"
+            role="tab"
+            aria-selected={active}
+            variant={active ? 'default' : 'outline'}
+            size="sm"
+            className={cn('shrink-0 rounded-full px-4', !active && 'bg-background')}
+            onClick={() => {
+              hapticSelection()
+              onChange(cat.id)
+            }}
+          >
+            {cat.label}
+          </Button>
+        )
+      })}
     </div>
   )
 }

@@ -1,0 +1,9 @@
+packages:
+  - .
+
+allowBuilds:
+  prisma: true
+  '@prisma/engines': true
+  '@prisma/client': true
+  sharp: true
+  esbuild: true

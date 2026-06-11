@@ -1,4 +1,4 @@
-@keyframes fadeInUp {
+@keyframes fade-in-up {
   from {
     opacity: 0;
     transform: translateY(14px);
@@ -9,27 +9,7 @@
   }
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes heroReveal {
+@keyframes hero-reveal {
   from {
     opacity: 0;
     transform: scale(1.04);
@@ -40,19 +20,7 @@
   }
 }
 
-@keyframes badgePop {
-  0% {
-    transform: scale(0.6);
-  }
-  70% {
-    transform: scale(1.12);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-@keyframes btnPulse {
+@keyframes btn-pulse {
   0% {
     transform: scale(1);
   }
@@ -64,148 +32,32 @@
   }
 }
 
-@keyframes tabIconBounce {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-3px);
-  }
+@utility animate-fade-in-up {
+  animation: fade-in-up var(--duration-normal) var(--ease-out) both;
 }
 
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
+@utility animate-hero-reveal {
+  animation: hero-reveal 0.5s var(--ease-out) both;
 }
 
-.page-enter {
-  animation: fadeInUp var(--duration-normal) var(--ease-out) both;
+@utility animate-btn-pulse {
+  animation: btn-pulse 0.35s var(--ease-out);
 }
 
-.product-hero {
-  animation: heroReveal 0.5s var(--ease-out) both;
+@utility animate-fade-in-up-delayed {
+  animation: fade-in-up 0.4s var(--ease-out) 0.1s both;
 }
 
-.product-grid .product-card {
-  animation: fadeInUp var(--duration-normal) var(--ease-out) both;
+@utility animate-fade-in-up-delayed-2 {
+  animation: fade-in-up 0.4s var(--ease-out) 0.15s both;
 }
 
-.product-grid .product-card:nth-child(1) {
-  animation-delay: 0.04s;
-}
-.product-grid .product-card:nth-child(2) {
-  animation-delay: 0.08s;
-}
-.product-grid .product-card:nth-child(3) {
-  animation-delay: 0.12s;
-}
-.product-grid .product-card:nth-child(4) {
-  animation-delay: 0.16s;
-}
-.product-grid .product-card:nth-child(5) {
-  animation-delay: 0.2s;
-}
-.product-grid .product-card:nth-child(6) {
-  animation-delay: 0.24s;
-}
-.product-grid .product-card:nth-child(7) {
-  animation-delay: 0.28s;
-}
-.product-grid .product-card:nth-child(8) {
-  animation-delay: 0.32s;
-}
-.product-grid .product-card:nth-child(9) {
-  animation-delay: 0.36s;
-}
-.product-grid .product-card:nth-child(10) {
-  animation-delay: 0.4s;
-}
-.product-grid .product-card:nth-child(11) {
-  animation-delay: 0.44s;
-}
-.product-grid .product-card:nth-child(12) {
-  animation-delay: 0.48s;
-}
-.product-grid .product-card:nth-child(13) {
-  animation-delay: 0.52s;
-}
-.product-grid .product-card:nth-child(14) {
-  animation-delay: 0.56s;
-}
-.product-grid .product-card:nth-child(15) {
-  animation-delay: 0.6s;
+@utility animate-fade-in-up-delayed-3 {
+  animation: fade-in-up 0.4s var(--ease-out) 0.18s both;
 }
 
-.product-card {
-  transition:
-    transform var(--duration-fast) var(--ease-out),
-    box-shadow var(--duration-fast) var(--ease-out);
-}
-
-.product-card:active {
-  transform: scale(0.97);
-}
-
-.tab-bar__item {
-  transition: color var(--duration-fast) ease;
-}
-
-.tab-bar__item--active .tab-bar__icon-wrap {
-  animation: tabIconBounce 0.45s var(--ease-out);
-}
-
-.tab-bar__badge {
-  animation: badgePop 0.35s var(--ease-out);
-}
-
-.chip {
-  transition:
-    background var(--duration-fast) ease,
-    border-color var(--duration-fast) ease,
-    color var(--duration-fast) ease,
-    transform var(--duration-fast) var(--ease-out);
-}
-
-.chip:active {
-  transform: scale(0.96);
-}
-
-.btn {
-  transition:
-    transform var(--duration-fast) var(--ease-out),
-    opacity var(--duration-fast) ease,
-    background var(--duration-fast) ease;
-}
-
-.btn:active {
-  transform: scale(0.98);
-}
-
-.btn--pulse {
-  animation: btnPulse 0.35s var(--ease-out);
-}
-
-.menu-item,
-.cart-line,
-.profile-header,
-.order-card,
-.info-block {
-  animation: fadeInUp var(--duration-normal) var(--ease-out) both;
-}
-
-.cart-line:nth-child(1) {
-  animation-delay: 0.05s;
-}
-.cart-line:nth-child(2) {
-  animation-delay: 0.1s;
-}
-.cart-line:nth-child(3) {
-  animation-delay: 0.15s;
+@utility animate-fade-in-up-delayed-4 {
+  animation: fade-in-up 0.4s var(--ease-out) 0.2s both;
 }
 
 @media (prefers-reduced-motion: reduce) {

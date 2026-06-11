@@ -1,6 +1,10 @@
 'use client'
 
 import { forwardRef, useImperativeHandle, useState } from 'react'
+import { Label } from '@/components/ui/label'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 
 export type CheckoutData = {
   name: string
@@ -13,10 +17,7 @@ export type CheckoutFormRef = {
   validateAndGetData: () => CheckoutData | null
 }
 
-export const CheckoutForm = forwardRef<CheckoutFormRef>(function CheckoutForm(
-  _,
-  ref,
-) {
+export const CheckoutForm = forwardRef<CheckoutFormRef>(function CheckoutForm(_, ref) {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [address, setAddress] = useState('')
@@ -47,26 +48,25 @@ export const CheckoutForm = forwardRef<CheckoutFormRef>(function CheckoutForm(
   }))
 
   return (
-    <form className="checkout-form" onSubmit={(e) => e.preventDefault()}>
+    <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
       {error && (
-        <p style={{ color: 'var(--tg-text)', margin: 0, fontSize: '0.9rem' }}>
-          {error}
-        </p>
+        <Alert variant="destructive">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
       )}
-      <div className="form-field">
-        <label htmlFor="checkout-name">Имя получателя</label>
-        <input
+      <div className="space-y-2">
+        <Label htmlFor="checkout-name">Имя получателя</Label>
+        <Input
           id="checkout-name"
-          type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Анна"
           autoComplete="name"
         />
       </div>
-      <div className="form-field">
-        <label htmlFor="checkout-phone">Телефон</label>
-        <input
+      <div className="space-y-2">
+        <Label htmlFor="checkout-phone">Телефон</Label>
+        <Input
           id="checkout-phone"
           type="tel"
           value={phone}
@@ -75,9 +75,9 @@ export const CheckoutForm = forwardRef<CheckoutFormRef>(function CheckoutForm(
           autoComplete="tel"
         />
       </div>
-      <div className="form-field">
-        <label htmlFor="checkout-address">Адрес доставки</label>
-        <textarea
+      <div className="space-y-2">
+        <Label htmlFor="checkout-address">Адрес доставки</Label>
+        <Textarea
           id="checkout-address"
           rows={3}
           value={address}
@@ -85,9 +85,9 @@ export const CheckoutForm = forwardRef<CheckoutFormRef>(function CheckoutForm(
           placeholder="Город, улица, дом, квартира"
         />
       </div>
-      <div className="form-field">
-        <label htmlFor="checkout-datetime">Дата и время</label>
-        <input
+      <div className="space-y-2">
+        <Label htmlFor="checkout-datetime">Дата и время</Label>
+        <Input
           id="checkout-datetime"
           type="datetime-local"
           value={datetime}

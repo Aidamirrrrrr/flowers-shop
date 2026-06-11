@@ -10,6 +10,7 @@ export type CartContextValue = {
   items: CartItem[]
   itemCount: number
   total: number
+  ready: boolean
   addItem: (productId: string, qty?: number) => void
   removeItem: (productId: string) => void
   updateQty: (productId: string, quantity: number) => void

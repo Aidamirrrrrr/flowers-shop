@@ -2,11 +2,12 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Info, ShoppingCart, User } from 'lucide-react'
+import { Home, Info, ShoppingCart, Shield, User } from 'lucide-react'
 import { useCart } from '@/hooks/useCart'
-import { Icon } from '@/components/ui/Icon'
+import { useSession } from '@/context/SessionContext'
+import { cn } from '@/lib/utils'
 
-const tabs = [
+const baseTabs = [
   { href: '/', label: 'Главная', icon: Home, exact: true },
   { href: '/cart', label: 'Корзина', icon: ShoppingCart, exact: false },
   { href: '/about', label: 'О нас', icon: Info, exact: false },
@@ -16,23 +17,39 @@ const tabs = [
 export function TabBar() {
   const pathname = usePathname()
   const { itemCount } = useCart()
+  const { user } = useSession()
+
+  const tabs = user?.isAdmin
+    ? [
+        baseTabs[0],
+        baseTabs[1],
+        { href: '/admin', label: 'Админ', icon: Shield, exact: false },
+        baseTabs[2],
+        baseTabs[3],
+      ]
+    : [...baseTabs]
 
   return (
-    <nav className="tab-bar" aria-label="Основная навигация">
+    <nav
+      className="fixed bottom-0 left-1/2 z-50 flex w-full max-w-[var(--app-max-width)] -translate-x-1/2 border-t border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80"
+      style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+      aria-label="Основная навигация"
+    >
       {tabs.map(({ href, label, icon: TabIcon, exact }) => {
         const isActive = exact ? pathname === href : pathname.startsWith(href)
         return (
           <Link
             key={href}
             href={href}
-            className={`tab-bar__item${isActive ? ' tab-bar__item--active' : ''}`}
+            className={cn(
+              'relative flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-[10px] font-medium transition-colors',
+              isActive ? 'text-foreground' : 'text-muted-foreground',
+            )}
           >
-            <span className="tab-bar__icon-wrap">
-              <Icon icon={TabIcon} size={20} />
-            </span>
-            {label}
+            <TabIcon className="h-5 w-5" strokeWidth={isActive ? 2.25 : 1.75} />
+            <span>{label}</span>
             {href === '/cart' && itemCount > 0 && (
-              <span className="tab-bar__badge" aria-label={`${itemCount} в корзине`}>
+              <span className="absolute right-[calc(50%-22px)] top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[9px] font-bold text-primary-foreground">
                 {itemCount > 99 ? '99+' : itemCount}
               </span>
             )}

@@ -1,3 +1,5 @@
+import { cn } from '@/lib/utils'
+
 /** Логотип бренда из public/Symbol black.jpeg */
 export const BRAND_LOGO_SRC = '/Symbol%20black.jpeg'
 
@@ -12,13 +14,19 @@ const SIZES = {
   lg: 48,
 } as const
 
-export function Logo({ size = 'sm', className = '' }: LogoProps) {
+const sizeClasses = {
+  sm: 'size-6',
+  md: 'size-8',
+  lg: 'size-12',
+} as const
+
+export function Logo({ size = 'sm', className }: LogoProps) {
   const px = SIZES[size]
   return (
     <img
       src={BRAND_LOGO_SRC}
       alt=""
-      className={`brand-logo brand-logo--${size} ${className}`.trim()}
+      className={cn('logo-invert-dark block shrink-0 object-contain', sizeClasses[size], className)}
       width={px}
       height={px}
       decoding="async"

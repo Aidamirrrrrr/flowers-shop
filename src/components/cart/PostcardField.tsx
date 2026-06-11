@@ -2,15 +2,18 @@
 
 import { useId, useState } from 'react'
 import { MessageSquare } from 'lucide-react'
-import { useCart } from '../../hooks/useCart'
-import { hapticSelection } from '../../telegram/haptic'
-import { Icon } from '../ui/Icon'
+import { useCart } from '@/hooks/useCart'
+import { hapticSelection } from '@/telegram/haptic'
+import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
+import { Card, CardContent } from '@/components/ui/card'
+import { Icon } from '@/components/ui/Icon'
 
 const MAX_LENGTH = 200
 
 type PostcardFieldProps = {
   productId: string
-  /** Показывать блок только если товар уже в корзине */
   requireInCart?: boolean
 }
 
@@ -44,25 +47,27 @@ export function PostcardField({ productId, requireInCart = true }: PostcardField
   }
 
   return (
-    <div className="postcard-block">
-      <button type="button" className="postcard-block__toggle" onClick={toggleOpen}>
-        <span className="postcard-block__toggle-label">
+    <Card className="animate-fade-in-up mb-4 gap-0 overflow-hidden py-0 shadow-none">
+      <Button
+        type="button"
+        variant="ghost"
+        className="h-auto w-full justify-between rounded-none px-4 py-3 text-sm font-medium"
+        onClick={toggleOpen}
+      >
+        <span className="flex items-center gap-2">
           <Icon icon={MessageSquare} size={18} />
           {open ? 'Открытка добавлена' : 'Добавить открытку'}
         </span>
-        <span className="postcard-block__chevron" aria-hidden>
+        <span className="text-lg leading-none text-muted-foreground" aria-hidden>
           {open ? '−' : '+'}
         </span>
-      </button>
+      </Button>
 
       {open && (
-        <div className="postcard-block__body">
-          <label htmlFor={textareaId} className="postcard-block__label">
-            Текст для получателя
-          </label>
-          <textarea
+        <CardContent className="space-y-2 border-t border-border px-4 pb-4 pt-3">
+          <Label htmlFor={textareaId}>Текст для получателя</Label>
+          <Textarea
             id={textareaId}
-            className="postcard-block__input"
             rows={4}
             maxLength={MAX_LENGTH}
             placeholder="Напишите пожелание — мы напечатаем на открытке"
@@ -70,11 +75,11 @@ export function PostcardField({ productId, requireInCart = true }: PostcardField
             onChange={(e) => setText(e.target.value)}
             onBlur={handleBlur}
           />
-          <p className="postcard-block__hint">
+          <p className="text-xs text-muted-foreground">
             {text.length}/{MAX_LENGTH} · сохранится в корзине
           </p>
-        </div>
+        </CardContent>
       )}
-    </div>
+    </Card>
   )
 }

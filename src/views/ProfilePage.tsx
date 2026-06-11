@@ -1,21 +1,26 @@
 'use client'
 
-import { ChevronRight, MessageCircle } from 'lucide-react'
-import { useTelegramUser, openSupport } from '../telegram/useTelegram'
-import { PageHeader } from '../components/layout/PageHeader'
-import { Icon } from '../components/ui/Icon'
-
-const MOCK_ORDERS = [
-  { id: '1042', title: 'Кремовые розы с эвкалиптом', date: '12 мая 2026', status: 'Доставлен' },
-  { id: '1038', title: 'Букет «Нежность»', date: '28 апр 2026', status: 'Доставлен' },
-]
+import { MessageCircle, Shield } from 'lucide-react'
+import { useTelegramUser, openSupport } from '@/telegram/useTelegram'
+import { useSession } from '@/context/SessionContext'
+import { useOrders } from '@/hooks/useOrders'
+import { formatPrice } from '@/lib/format-price'
+import { PageHeader } from '@/components/layout/PageHeader'
+import { Card, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Skeleton } from '@/components/ui/skeleton'
+import { MenuRow } from '@/components/ui/menu-row'
+import { Separator } from '@/components/ui/separator'
 
 export function ProfilePage() {
-  const user = useTelegramUser()
-  const displayName = user
-    ? [user.first_name, user.last_name].filter(Boolean).join(' ')
-    : 'Гость'
-  const username = user?.username ? `@${user.username}` : 'Демо-профиль'
+  const tgUser = useTelegramUser()
+  const { user: me } = useSession()
+  const { orders, loading, error } = useOrders()
+
+  const displayName = tgUser
+    ? [tgUser.first_name, tgUser.last_name].filter(Boolean).join(' ')
+    : me?.displayName ?? 'Гость'
+  const username = tgUser?.username ? `@${tgUser.username}` : me?.username ? `@${me.username}` : ''
 
   const initials = displayName
     .split(' ')
@@ -25,43 +30,74 @@ export function ProfilePage() {
     .toUpperCase()
 
   return (
-    <>
+    <div className="space-y-6">
       <PageHeader title="Профиль" />
-      <div className="profile-header">
-        <div className="profile-avatar">
-          {user?.photo_url ? (
-            <img src={user.photo_url} alt="" />
-          ) : (
-            initials
-          )}
-        </div>
-        <div>
-          <h2 className="profile-name">{displayName}</h2>
-          <p className="profile-sub">{username}</p>
-        </div>
-      </div>
 
-      <nav className="menu-list" aria-label="Меню профиля">
-        <button type="button" className="menu-item" onClick={openSupport}>
-          <span className="menu-item__label">
-            <Icon icon={MessageCircle} size={20} />
-            Написать в поддержку
-          </span>
-          <Icon icon={ChevronRight} size={18} className="menu-item__arrow" />
-        </button>
-      </nav>
-
-      <section className="orders-section">
-        <h2>История заказов</h2>
-        {MOCK_ORDERS.map((order) => (
-          <div key={order.id} className="order-card">
-            <p className="order-card__title">{order.title}</p>
-            <p className="order-card__meta">
-              №{order.id} · {order.date} · {order.status}
-            </p>
+      <Card>
+        <CardContent className="flex items-center gap-4 p-4">
+          <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border bg-muted text-lg font-medium">
+            {tgUser?.photo_url ? (
+              <img src={tgUser.photo_url} alt="" className="h-full w-full object-cover" />
+            ) : (
+              initials
+            )}
           </div>
-        ))}
+          <div className="min-w-0">
+            <h2 className="truncate text-lg font-semibold">{displayName}</h2>
+            {username && <p className="truncate text-sm text-muted-foreground">{username}</p>}
+            {me?.isAdmin && (
+              <Badge variant="secondary" className="mt-2">
+                Администратор
+              </Badge>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="overflow-hidden py-0">
+        {me?.isAdmin && (
+          <>
+            <MenuRow icon={Shield} label="Админ-панель" href="/admin" />
+            <Separator />
+          </>
+        )}
+        <MenuRow icon={MessageCircle} label="Написать в поддержку" onClick={openSupport} />
+      </Card>
+
+      <section className="space-y-3">
+        <h2 className="text-base font-semibold">История заказов</h2>
+        {loading && (
+          <div className="space-y-2">
+            <Skeleton className="h-24 w-full rounded-lg" />
+            <Skeleton className="h-24 w-full rounded-lg" />
+          </div>
+        )}
+        {error && !loading && (
+          <p className="text-sm text-muted-foreground">{error}</p>
+        )}
+        {!loading && !error && orders.length === 0 && (
+          <p className="text-sm text-muted-foreground">Заказов пока нет</p>
+        )}
+        <div className="space-y-3">
+          {orders.map((order) => (
+            <Card key={order.id}>
+              <CardContent className="space-y-2 p-4">
+                <p className="font-medium leading-snug">{order.title}</p>
+                <p className="text-sm text-muted-foreground">
+                  №{order.shortId} · {order.date}
+                </p>
+                <div className="flex items-center justify-between gap-2">
+                  <Badge variant="outline">{order.status}</Badge>
+                  <span className="text-sm font-medium">
+                    {formatPrice(order.total)}
+                    {order.itemCount > 1 ? ` · ${order.itemCount} шт.` : ''}
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </section>
-    </>
+    </div>
   )
 }
