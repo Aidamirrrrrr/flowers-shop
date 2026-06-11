@@ -29,3 +29,6 @@ tsconfig.tsbuildinfo
 *.sw?
 
 /src/generated/prisma
+
+# Uploaded product images (stored on server)
+/public/uploads/

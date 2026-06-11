@@ -37,6 +37,8 @@ pnpm db:setup     # push + seed
 
 **Railway:** добавьте `DATABASE_URL` в Variables. После деплоя выполните `pnpm db:deploy` (или в build-команде), затем при необходимости `pnpm db:seed`.
 
+**Фото товаров:** загружаются в `public/uploads/products`. На Railway подключите Volume с mount path `/app` — файлы сохранятся между деплоями. Опционально: `UPLOADS_DIR=/app/public/uploads/products`.
+
 ## Демо-админ
 
 После `pnpm db:seed` пользователь TG mock (id `100001`) — **ADMIN**.  
