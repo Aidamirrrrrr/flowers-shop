@@ -1,7 +1,6 @@
 'use client'
 
 import { Minus, Plus, Trash2 } from 'lucide-react'
-import { hapticImpact, hapticSelection } from '@/telegram/haptic'
 import { useCatalogContext } from '@/context/CatalogContext'
 import { useCart } from '@/hooks/useCart'
 import type { CartItem } from '@/context/cart-context'
@@ -41,12 +40,10 @@ export function CartLine({ item }: CartLineProps) {
               type="button"
               variant="outline"
               size="icon"
+              haptic="selection"
               className="h-8 w-8"
               aria-label="Уменьшить"
-              onClick={() => {
-                hapticSelection()
-                updateQty(item.productId, item.quantity - 1)
-              }}
+              onClick={() => updateQty(item.productId, item.quantity - 1)}
             >
               <Minus className="h-4 w-4" />
             </Button>
@@ -55,12 +52,10 @@ export function CartLine({ item }: CartLineProps) {
               type="button"
               variant="outline"
               size="icon"
+              haptic="selection"
               className="h-8 w-8"
               aria-label="Увеличить"
-              onClick={() => {
-                hapticSelection()
-                updateQty(item.productId, item.quantity + 1)
-              }}
+              onClick={() => updateQty(item.productId, item.quantity + 1)}
             >
               <Plus className="h-4 w-4" />
             </Button>
@@ -69,10 +64,7 @@ export function CartLine({ item }: CartLineProps) {
               variant="ghost"
               size="icon"
               className="ml-auto h-8 w-8 text-muted-foreground"
-              onClick={() => {
-                hapticImpact('light')
-                removeItem(item.productId)
-              }}
+              onClick={() => removeItem(item.productId)}
               aria-label="Удалить"
             >
               <Trash2 className="h-4 w-4" />

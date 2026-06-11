@@ -1,7 +1,7 @@
 @keyframes fade-in-up {
   from {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -9,10 +9,21 @@
   }
 }
 
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.988);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @keyframes hero-reveal {
   from {
     opacity: 0;
-    transform: scale(1.04);
+    transform: scale(1.03);
   }
   to {
     opacity: 1;
@@ -32,32 +43,36 @@
   }
 }
 
+@utility animate-page-enter {
+  animation: page-enter var(--duration-page) var(--ease-smooth) both;
+}
+
 @utility animate-fade-in-up {
-  animation: fade-in-up var(--duration-normal) var(--ease-out) both;
+  animation: fade-in-up var(--duration-normal) var(--ease-smooth) both;
 }
 
 @utility animate-hero-reveal {
-  animation: hero-reveal 0.5s var(--ease-out) both;
+  animation: hero-reveal 0.58s var(--ease-smooth) both;
 }
 
 @utility animate-btn-pulse {
-  animation: btn-pulse 0.35s var(--ease-out);
+  animation: btn-pulse 0.38s var(--ease-smooth);
 }
 
 @utility animate-fade-in-up-delayed {
-  animation: fade-in-up 0.4s var(--ease-out) 0.1s both;
+  animation: fade-in-up 0.48s var(--ease-smooth) 0.06s both;
 }
 
 @utility animate-fade-in-up-delayed-2 {
-  animation: fade-in-up 0.4s var(--ease-out) 0.15s both;
+  animation: fade-in-up 0.48s var(--ease-smooth) 0.1s both;
 }
 
 @utility animate-fade-in-up-delayed-3 {
-  animation: fade-in-up 0.4s var(--ease-out) 0.18s both;
+  animation: fade-in-up 0.48s var(--ease-smooth) 0.14s both;
 }
 
 @utility animate-fade-in-up-delayed-4 {
-  animation: fade-in-up 0.4s var(--ease-out) 0.2s both;
+  animation: fade-in-up 0.48s var(--ease-smooth) 0.18s both;
 }
 
 @media (prefers-reduced-motion: reduce) {

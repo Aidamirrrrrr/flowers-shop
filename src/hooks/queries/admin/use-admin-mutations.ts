@@ -7,7 +7,8 @@ import {
   invalidateAdminProducts,
   invalidateOrders,
 } from '@/lib/query/invalidate'
-import type { AdminProduct, AdminCategory } from '@/types/admin'
+import { queryKeys } from '@/lib/query/keys'
+import type { AdminProduct, AdminCategory, AdminUser } from '@/types/admin'
 import type { OrderStatusKey } from '@/lib/order-status-labels'
 
 export function useToggleProductMutation() {
@@ -89,6 +90,25 @@ export function useSaveProductMutation() {
       })
     },
     onSuccess: () => void invalidateAdminProducts(queryClient),
+  })
+}
+
+export function useUpdateUserRoleMutation() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({ userId, role }: { userId: string; role: 'ADMIN' | 'USER' }) => {
+      const data = await apiJson<{ user: AdminUser }>(`/api/admin/users/${userId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ role }),
+      })
+      return data.user
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.admin.users })
+      void queryClient.invalidateQueries({ queryKey: queryKeys.session })
+    },
   })
 }
 

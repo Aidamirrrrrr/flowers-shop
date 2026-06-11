@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft } from 'lucide-react'
 import type { CategoryFormValues } from '@/types/admin'
 import { EMPTY_CATEGORY_FORM } from '@/types/admin'
 import { PageHeader } from '@/components/layout/PageHeader'
@@ -12,6 +11,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useAdminCategoryQuery } from '@/hooks/queries/admin/use-admin-categories-query'
 import { useSaveCategoryMutation } from '@/hooks/queries/admin/use-admin-mutations'
 
@@ -70,18 +70,7 @@ export function CategoryFormPage({ mode, categoryId }: CategoryFormPageProps) {
 
   return (
     <div className="space-y-4 pb-6">
-      <PageHeader title={mode === 'create' ? 'Новая категория' : 'Редактировать категорию'}>
-        <Button variant="ghost" size="sm" className="ml-auto" asChild>
-          <Link href="/admin/categories">
-            <ArrowLeft className="mr-1 h-4 w-4" />
-            Назад
-          </Link>
-        </Button>
-      </PageHeader>
-
-      {mode === 'edit' && categoryId && (
-        <p className="text-sm text-muted-foreground">ID: {categoryId}</p>
-      )}
+      <PageHeader title={mode === 'create' ? 'Новая категория' : 'Редактирование'} />
 
       {error && (
         <Alert variant="destructive">
@@ -90,28 +79,38 @@ export function CategoryFormPage({ mode, categoryId }: CategoryFormPageProps) {
       )}
 
       <form className="space-y-4" onSubmit={(e) => void handleSubmit(e)}>
-        <div className="space-y-2">
-          <Label htmlFor="category-label">Название</Label>
-          <Input
-            id="category-label"
-            value={form.label}
-            onChange={(e) => setForm((p) => ({ ...p, label: e.target.value }))}
-            placeholder="Пионы"
-            required
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="category-sort">Порядок в каталоге</Label>
-          <Input
-            id="category-sort"
-            type="number"
-            value={form.sort}
-            onChange={(e) => setForm((p) => ({ ...p, sort: e.target.value }))}
-            placeholder="Авто"
-          />
-        </div>
+        <Card className="gap-0 overflow-hidden py-0 shadow-none">
+          <CardHeader className="border-b border-border px-4 py-3">
+            <CardTitle className="text-sm font-medium">Категория</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4 p-4">
+            {mode === 'edit' && categoryId && (
+              <p className="text-xs text-muted-foreground">ID: {categoryId}</p>
+            )}
+            <div className="space-y-2">
+              <Label htmlFor="category-label">Название</Label>
+              <Input
+                id="category-label"
+                value={form.label}
+                onChange={(e) => setForm((p) => ({ ...p, label: e.target.value }))}
+                placeholder="Пионы"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="category-sort">Порядок в каталоге</Label>
+              <Input
+                id="category-sort"
+                type="number"
+                value={form.sort}
+                onChange={(e) => setForm((p) => ({ ...p, sort: e.target.value }))}
+                placeholder="Авто"
+              />
+            </div>
+          </CardContent>
+        </Card>
 
-        <div className="flex gap-2 pt-2">
+        <div className="flex gap-2 pt-1">
           <Button type="button" variant="outline" className="flex-1" asChild>
             <Link href="/admin/categories">Отмена</Link>
           </Button>

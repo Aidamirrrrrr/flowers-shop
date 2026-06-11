@@ -13,7 +13,6 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Card, CardContent } from '@/components/ui/card'
 import { Icon } from '@/components/ui/Icon'
 import { PostcardField } from '@/components/cart/PostcardField'
-import { hapticImpact, hapticSelection } from '@/telegram/haptic'
 import { cn } from '@/lib/utils'
 
 export function ProductPage() {
@@ -53,7 +52,6 @@ export function ProductPage() {
 
   const handleAdd = () => {
     addItem(product.id)
-    hapticImpact('medium')
     setJustAdded(true)
     setShowPostcard(true)
     window.setTimeout(() => setJustAdded(false), 600)
@@ -78,6 +76,7 @@ export function ProductPage() {
           <Button
             className={cn('w-full', justAdded && 'animate-btn-pulse')}
             disabled={!ready}
+            haptic="medium"
             onClick={handleAdd}
           >
             {justAdded ? <Icon icon={Check} size={20} /> : <Icon icon={ShoppingCart} size={20} />}
@@ -89,11 +88,9 @@ export function ProductPage() {
               type="button"
               variant="outline"
               size="icon"
+              haptic="selection"
               aria-label="Уменьшить"
-              onClick={() => {
-                hapticSelection()
-                updateQty(product.id, qty - 1)
-              }}
+              onClick={() => updateQty(product.id, qty - 1)}
             >
               <Icon icon={Minus} size={18} />
             </Button>
@@ -102,11 +99,9 @@ export function ProductPage() {
               type="button"
               variant="outline"
               size="icon"
+              haptic="selection"
               aria-label="Увеличить"
-              onClick={() => {
-                hapticSelection()
-                updateQty(product.id, qty + 1)
-              }}
+              onClick={() => updateQty(product.id, qty + 1)}
             >
               <Icon icon={Plus} size={18} />
             </Button>

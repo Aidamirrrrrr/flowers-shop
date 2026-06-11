@@ -2,6 +2,7 @@ import Link from 'next/link'
 import type { LucideIcon } from 'lucide-react'
 import { ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { onHapticPointerDown } from '@/telegram/bind-haptic'
 
 type MenuRowProps = {
   icon: LucideIcon
@@ -30,14 +31,19 @@ export function MenuRow({ icon: Icon, label, href, onClick, className }: MenuRow
 
   if (href) {
     return (
-      <Link href={href} className={base}>
+      <Link href={href} className={base} onPointerDown={onHapticPointerDown('light')}>
         {content}
       </Link>
     )
   }
 
   return (
-    <button type="button" className={base} onClick={onClick}>
+    <button
+      type="button"
+      className={base}
+      onPointerDown={onHapticPointerDown('light')}
+      onClick={onClick}
+    >
       {content}
     </button>
   )

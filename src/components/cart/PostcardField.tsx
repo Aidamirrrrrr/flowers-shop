@@ -3,7 +3,6 @@
 import { useId, useState } from 'react'
 import { MessageSquare } from 'lucide-react'
 import { useCart } from '@/hooks/useCart'
-import { hapticSelection } from '@/telegram/haptic'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -31,7 +30,6 @@ export function PostcardField({ productId, requireInCart = true }: PostcardField
   }
 
   const toggleOpen = () => {
-    hapticSelection()
     setOpen((v) => {
       const next = !v
       if (!next) {
@@ -51,6 +49,7 @@ export function PostcardField({ productId, requireInCart = true }: PostcardField
       <Button
         type="button"
         variant="ghost"
+        haptic="selection"
         className="h-auto w-full justify-between rounded-none px-4 py-3 text-sm font-medium"
         onClick={toggleOpen}
       >

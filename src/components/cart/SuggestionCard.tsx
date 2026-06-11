@@ -7,7 +7,6 @@ import { useCart } from '@/hooks/useCart'
 import { Price } from '@/components/ui/Price'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { hapticImpact } from '@/telegram/haptic'
 import { Icon } from '@/components/ui/Icon'
 
 type SuggestionCardProps = {
@@ -21,7 +20,6 @@ export function SuggestionCard({ product }: SuggestionCardProps) {
     e.preventDefault()
     e.stopPropagation()
     addItem(product.id)
-    hapticImpact('light')
   }
 
   return (

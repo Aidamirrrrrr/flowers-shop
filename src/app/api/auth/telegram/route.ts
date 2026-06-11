@@ -13,7 +13,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const role = roleForUsername(telegramUser.username)
+    const bootstrapRole = roleForUsername(telegramUser.username)
 
     const user = await prisma.user.upsert({
       where: { telegramId: BigInt(telegramUser.id) },
@@ -22,13 +22,12 @@ export async function POST(request: Request) {
         username: telegramUser.username ?? null,
         firstName: telegramUser.first_name,
         lastName: telegramUser.last_name ?? null,
-        role,
+        role: bootstrapRole,
       },
       update: {
         username: telegramUser.username ?? null,
         firstName: telegramUser.first_name,
         lastName: telegramUser.last_name ?? null,
-        role,
       },
     })
 

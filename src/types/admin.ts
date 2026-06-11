@@ -19,6 +19,16 @@ export type AdminProduct = {
   active: boolean
 }
 
+export type AdminUser = {
+  id: string
+  telegramId: string
+  username: string | null
+  displayName: string
+  role: 'USER' | 'ADMIN'
+  orderCount: number
+  createdAtLabel: string
+}
+
 export type AdminOrder = {
   id: string
   shortId: string

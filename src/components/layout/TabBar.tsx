@@ -6,6 +6,7 @@ import { Home, Info, ShoppingCart, Shield, User } from 'lucide-react'
 import { useCart } from '@/hooks/useCart'
 import { useSession } from '@/context/SessionContext'
 import { cn } from '@/lib/utils'
+import { onHapticPointerDown } from '@/telegram/bind-haptic'
 
 const baseTabs = [
   { href: '/', label: 'Главная', icon: Home, exact: true },
@@ -31,7 +32,7 @@ export function TabBar() {
 
   return (
     <nav
-      className="fixed bottom-0 left-1/2 z-50 flex h-[calc(var(--tab-bar-height)+env(safe-area-inset-bottom,0px))] w-full max-w-[var(--app-max-width)] -translate-x-1/2 border-t border-border bg-background/95 pb-[env(safe-area-inset-bottom,0px)] backdrop-blur supports-[backdrop-filter]:bg-background/80"
+      className="fixed bottom-0 left-1/2 z-50 flex h-[calc(var(--tab-bar-height)+env(safe-area-inset-bottom,0px))] w-full max-w-[var(--app-max-width)] -translate-x-1/2 border-t border-border bg-background/95 pb-[calc(env(safe-area-inset-bottom,0px)+8px)] pt-1 backdrop-blur supports-[backdrop-filter]:bg-background/80"
       aria-label="Основная навигация"
     >
       {tabs.map(({ href, label, icon: TabIcon, exact }) => {
@@ -40,8 +41,9 @@ export function TabBar() {
           <Link
             key={href}
             href={href}
+            onPointerDown={onHapticPointerDown('selection')}
             className={cn(
-              'relative flex h-full flex-1 flex-col items-center justify-center gap-1.5 py-2 text-[11px] font-medium transition-colors',
+              'relative flex h-full flex-1 flex-col items-center justify-center gap-2 py-3 text-[11px] font-medium transition-colors active:opacity-70 motion-safe:transition-opacity',
               isActive ? 'text-foreground' : 'text-muted-foreground',
             )}
           >

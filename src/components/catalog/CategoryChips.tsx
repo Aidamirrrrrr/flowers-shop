@@ -2,7 +2,6 @@
 
 import type { CatalogCategory } from '@/types/catalog'
 import { Button } from '@/components/ui/button'
-import { hapticSelection } from '@/telegram/haptic'
 import { cn } from '@/lib/utils'
 
 type CategoryChipsProps = {
@@ -28,11 +27,9 @@ export function CategoryChips({ categories, selected, onChange }: CategoryChipsP
             aria-selected={active}
             variant={active ? 'default' : 'outline'}
             size="sm"
+            haptic="selection"
             className={cn('shrink-0 rounded-full px-4', !active && 'bg-background')}
-            onClick={() => {
-              hapticSelection()
-              onChange(cat.id)
-            }}
+            onClick={() => onChange(cat.id)}
           >
             {cat.label}
           </Button>

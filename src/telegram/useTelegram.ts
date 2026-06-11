@@ -6,12 +6,10 @@ import { applyTelegramTheme } from './applyTheme'
 import { hapticImpact } from './haptic'
 import { getWebApp } from './webApp'
 
-const STACK_ROUTES = ['/product/', '/cart/checkout', '/admin']
+const STACK_PREFIXES = ['/product/', '/cart/checkout', '/admin/products/', '/admin/categories/']
 
 function isStackRoute(pathname: string) {
-  return STACK_ROUTES.some((r) =>
-    r.endsWith('/') ? pathname.startsWith(r) : pathname === r || pathname.startsWith(r),
-  )
+  return STACK_PREFIXES.some((prefix) => pathname.startsWith(prefix))
 }
 
 export function useTelegramInit() {

@@ -3,10 +3,10 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft } from 'lucide-react'
 import type { ProductFormValues } from '@/types/admin'
 import { EMPTY_PRODUCT_FORM } from '@/types/admin'
 import { PageHeader } from '@/components/layout/PageHeader'
+import { ProductImageUpload } from '@/components/admin/ProductImageUpload'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -21,6 +21,7 @@ import {
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Switch } from '@/components/ui/switch'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useAdminProductQuery } from '@/hooks/queries/admin/use-admin-products-query'
 import { useAdminCategoriesQuery } from '@/hooks/queries/admin/use-admin-categories-query'
 import { useSaveProductMutation } from '@/hooks/queries/admin/use-admin-mutations'
@@ -95,9 +96,7 @@ export function ProductFormPage({ mode, productId }: ProductFormPageProps) {
     setForm((prev) => ({ ...prev, [key]: value }))
   }
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
+  const handleImageSelect = (file: File) => {
     setImageFile(file)
     setImagePreview(URL.createObjectURL(file))
   }
@@ -111,7 +110,7 @@ export function ProductFormPage({ mode, productId }: ProductFormPageProps) {
       if (imageFile) {
         imageUrl = await uploadProductImage(imageFile)
       } else if (!imageUrl) {
-        throw new Error('Загрузите изображение товара')
+        throw new Error('Добавьте фото товара')
       }
 
       const payload = {
@@ -135,126 +134,122 @@ export function ProductFormPage({ mode, productId }: ProductFormPageProps) {
   const loading = mode === 'edit' && (productQuery.isPending || !initialized)
 
   if (loading) {
-    return <Skeleton className="h-40 w-full" />
+    return <Skeleton className="aspect-square w-[calc(100%+32px)] -mx-4" />
   }
 
   return (
-    <div className="space-y-4 pb-6">
-      <PageHeader title={mode === 'create' ? 'Новый товар' : 'Редактировать товар'}>
-        <Button variant="ghost" size="sm" className="ml-auto" asChild>
-          <Link href="/admin/products">
-            <ArrowLeft className="mr-1 h-4 w-4" />
-            Назад
-          </Link>
-        </Button>
-      </PageHeader>
+    <div className="-mx-4 pb-6">
+      <ProductImageUpload previewSrc={previewSrc} onFileSelect={handleImageSelect} />
 
-      {error && (
-        <Alert variant="destructive">
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
+      <div className="mt-4 space-y-4 px-4">
+        <PageHeader title={mode === 'create' ? 'Новый товар' : 'Редактирование'} />
 
-      <form className="space-y-4" onSubmit={(e) => void handleSubmit(e)}>
-        <div className="space-y-2">
-          <Label htmlFor="product-name">Название</Label>
-          <Input
-            id="product-name"
-            value={form.name}
-            onChange={(e) => update('name', e.target.value)}
-            placeholder="Букет «Нежность»"
-            required
-          />
-        </div>
+        {error && (
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
 
-        <div className="space-y-2">
-          <Label htmlFor="product-price">Цена, ₽</Label>
-          <Input
-            id="product-price"
-            type="number"
-            min={1}
-            value={form.price}
-            onChange={(e) => update('price', e.target.value)}
-            required
-          />
-        </div>
+        <form className="space-y-4" onSubmit={(e) => void handleSubmit(e)}>
+          <Card className="gap-0 overflow-hidden py-0 shadow-none">
+            <CardHeader className="border-b border-border px-4 py-3">
+              <CardTitle className="text-sm font-medium">Основное</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 p-4">
+              <div className="space-y-2">
+                <Label htmlFor="product-name">Название</Label>
+                <Input
+                  id="product-name"
+                  value={form.name}
+                  onChange={(e) => update('name', e.target.value)}
+                  placeholder="Букет «Нежность»"
+                  required
+                />
+              </div>
 
-        <div className="space-y-2">
-          <Label>Категория</Label>
-          <Select value={form.categoryId} onValueChange={(v) => update('categoryId', v)}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Выберите категорию" />
-            </SelectTrigger>
-            <SelectContent>
-              {categories.map((cat) => (
-                <SelectItem key={cat.id} value={cat.id}>
-                  {cat.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-2">
+                  <Label htmlFor="product-price">Цена, ₽</Label>
+                  <Input
+                    id="product-price"
+                    type="number"
+                    min={1}
+                    value={form.price}
+                    onChange={(e) => update('price', e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Категория</Label>
+                  <Select value={form.categoryId} onValueChange={(v) => update('categoryId', v)}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Категория" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((cat) => (
+                        <SelectItem key={cat.id} value={cat.id}>
+                          {cat.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-        <div className="space-y-2">
-          <Label htmlFor="product-image">Фото</Label>
-          <Input
-            id="product-image"
-            type="file"
-            accept="image/jpeg,image/png,image/webp,image/gif"
-            onChange={handleImageChange}
-            required={mode === 'create' && !form.image}
-          />
-          {previewSrc && (
-            <img
-              src={previewSrc}
-              alt=""
-              className="aspect-square w-full max-w-[240px] rounded-md border border-border object-cover"
-            />
-          )}
-        </div>
+          <Card className="gap-0 overflow-hidden py-0 shadow-none">
+            <CardHeader className="border-b border-border px-4 py-3">
+              <CardTitle className="text-sm font-medium">Описание</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 p-4">
+              <div className="space-y-2">
+                <Label htmlFor="product-description">О товаре</Label>
+                <Textarea
+                  id="product-description"
+                  rows={4}
+                  value={form.description}
+                  onChange={(e) => update('description', e.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="product-care">Уход за букетом</Label>
+                <Textarea
+                  id="product-care"
+                  rows={3}
+                  value={form.careTips}
+                  onChange={(e) => update('careTips', e.target.value)}
+                  required
+                />
+              </div>
+            </CardContent>
+          </Card>
 
-        <div className="space-y-2">
-          <Label htmlFor="product-description">Описание</Label>
-          <Textarea
-            id="product-description"
-            rows={4}
-            value={form.description}
-            onChange={(e) => update('description', e.target.value)}
-            required
-          />
-        </div>
+          <Card className="gap-0 overflow-hidden py-0 shadow-none">
+            <CardContent className="flex items-center justify-between gap-3 p-4">
+              <div>
+                <p className="text-sm font-medium">В каталоге</p>
+                <p className="text-xs text-muted-foreground">Скрытые товары не видны покупателям</p>
+              </div>
+              <Switch
+                id="product-active"
+                checked={form.active}
+                onCheckedChange={(checked) => update('active', checked)}
+              />
+            </CardContent>
+          </Card>
 
-        <div className="space-y-2">
-          <Label htmlFor="product-care">Уход за букетом</Label>
-          <Textarea
-            id="product-care"
-            rows={3}
-            value={form.careTips}
-            onChange={(e) => update('careTips', e.target.value)}
-            required
-          />
-        </div>
-
-        <div className="flex items-center justify-between gap-3 rounded-lg border border-border p-3">
-          <Label htmlFor="product-active" className="cursor-pointer">
-            Показывать в каталоге
-          </Label>
-          <Switch
-            id="product-active"
-            checked={form.active}
-            onCheckedChange={(checked) => update('active', checked)}
-          />
-        </div>
-
-        <div className="flex gap-2 pt-2">
-          <Button type="button" variant="outline" className="flex-1" asChild>
-            <Link href="/admin/products">Отмена</Link>
-          </Button>
-          <Button type="submit" className="flex-1" disabled={saveProduct.isPending}>
-            {saveProduct.isPending ? 'Сохраняем…' : mode === 'create' ? 'Создать' : 'Сохранить'}
-          </Button>
-        </div>
-      </form>
+          <div className="flex gap-2 pt-1">
+            <Button type="button" variant="outline" className="flex-1" asChild>
+              <Link href="/admin/products">Отмена</Link>
+            </Button>
+            <Button type="submit" className="flex-1" disabled={saveProduct.isPending}>
+              {saveProduct.isPending ? 'Сохраняем…' : mode === 'create' ? 'Создать' : 'Сохранить'}
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   )
 }
