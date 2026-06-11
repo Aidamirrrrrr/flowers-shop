@@ -3,12 +3,28 @@ import path from 'path'
 
 export const UPLOADS_PUBLIC_PREFIX = '/uploads/products'
 
-/** Railway: volume на /app → по умолчанию /app/public/uploads/products */
-function getUploadsDir() {
+const MIME_BY_EXT: Record<string, string> = {
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.png': 'image/png',
+  '.webp': 'image/webp',
+  '.gif': 'image/gif',
+}
+
+/** Локально: public/uploads/products. Railway: volume на /app/data (НЕ на /app!). */
+export function getUploadsDir() {
   if (process.env.UPLOADS_DIR) {
     return path.resolve(process.env.UPLOADS_DIR)
   }
+  if (process.env.RAILWAY_ENVIRONMENT_NAME || process.env.RAILWAY_PROJECT_ID) {
+    return '/app/data/uploads/products'
+  }
   return path.join(process.cwd(), 'public', 'uploads', 'products')
+}
+
+export function contentTypeForFilename(filename: string): string {
+  const ext = path.extname(filename).toLowerCase()
+  return MIME_BY_EXT[ext] ?? 'application/octet-stream'
 }
 
 const ALLOWED_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif'])

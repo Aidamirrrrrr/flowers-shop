@@ -37,7 +37,16 @@ pnpm db:setup     # push + seed
 
 **Railway:** добавьте `DATABASE_URL` в Variables. После деплоя выполните `pnpm db:deploy` (или в build-команде), затем при необходимости `pnpm db:seed`.
 
-**Фото товаров:** загружаются в `public/uploads/products`. На Railway подключите Volume с mount path `/app` — файлы сохранятся между деплоями. Опционально: `UPLOADS_DIR=/app/public/uploads/products`.
+**Фото товаров (Railway Volume):**
+
+| Параметр | Значение |
+|----------|----------|
+| Mount path | **`/app/data`** |
+| `UPLOADS_DIR` | `/app/data/uploads/products` (опционально, подставится само на Railway) |
+
+**Важно:** не монтируйте volume на `/app` — это затирает весь код и появится `ERR_PNPM_NO_IMPORTER_MANIFEST_FOUND`.
+
+Локально фото лежат в `public/uploads/products`.
 
 ## Демо-админ
 
