@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { roleForUsername } from '@/constants/admins'
 import { COOKIE_NAME, createSessionToken } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { toSessionUser } from '@/lib/session-user'
 import { resolveTelegramUser } from '@/lib/telegram-auth'
 
 export async function POST(request: Request) {
@@ -29,10 +30,17 @@ export async function POST(request: Request) {
         firstName: telegramUser.first_name,
         lastName: telegramUser.last_name ?? null,
       },
+      select: {
+        id: true,
+        role: true,
+        firstName: true,
+        lastName: true,
+        username: true,
+      },
     })
 
     const token = await createSessionToken({ userId: user.id, role: user.role })
-    const response = NextResponse.json({ ok: true, userId: user.id })
+    const response = NextResponse.json({ ok: true, user: toSessionUser(user) })
     response.cookies.set(COOKIE_NAME, token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',

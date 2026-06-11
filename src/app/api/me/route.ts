@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { toSessionUser } from '@/lib/session-user'
 
 export async function GET() {
   const session = await getSession()
@@ -23,13 +24,5 @@ export async function GET() {
     return NextResponse.json({ error: 'User not found' }, { status: 404 })
   }
 
-  return NextResponse.json({
-    user: {
-      id: user.id,
-      role: user.role,
-      isAdmin: user.role === 'ADMIN',
-      displayName: [user.firstName, user.lastName].filter(Boolean).join(' ') || 'Пользователь',
-      username: user.username,
-    },
-  })
+  return NextResponse.json({ user: toSessionUser(user) })
 }

@@ -26,10 +26,11 @@ async function fetchOrders() {
   }
 }
 
-export function useOrdersQuery() {
+export function useOrdersQuery(enabled = true) {
   return useQuery({
     queryKey: queryKeys.orders,
     queryFn: fetchOrders,
+    enabled,
     staleTime: 30_000,
   })
 }

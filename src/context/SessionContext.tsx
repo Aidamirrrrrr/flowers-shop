@@ -39,13 +39,30 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     async function bootstrap() {
       try {
+        const existing = await fetchSession()
+        if (existing) {
+          queryClient.setQueryData(queryKeys.session, existing)
+          return
+        }
+
         const initData = getWebApp().initData ?? ''
-        await fetch('/api/auth/telegram', {
+        if (!initData) return
+
+        const response = await fetch('/api/auth/telegram', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ initData }),
           credentials: 'include',
         })
+
+        if (response.ok) {
+          const data = (await response.json()) as { user?: SessionUser }
+          if (data.user) {
+            queryClient.setQueryData(queryKeys.session, data.user)
+            return
+          }
+        }
+
         await queryClient.fetchQuery({
           queryKey: queryKeys.session,
           queryFn: fetchSession,

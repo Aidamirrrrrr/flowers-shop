@@ -7,6 +7,7 @@ import type { CatalogCategory, CatalogProduct } from '@/types/catalog'
 export type CatalogInitial = {
   products: CatalogProduct[]
   categories: CatalogCategory[]
+  fetchedAt?: number
 }
 
 type CatalogContextValue = {

@@ -9,12 +9,16 @@ import { invalidateCatalog } from '@/lib/query/invalidate'
 
 export function useCatalog(initial?: CatalogInitial) {
   const queryClient = useQueryClient()
-  const productsQuery = useProductsQuery(initial?.products)
-  const categoriesQuery = useCategoriesQuery(initial?.categories)
+  const seededAt = initial?.fetchedAt
+  const productsQuery = useProductsQuery(initial?.products, seededAt)
+  const categoriesQuery = useCategoriesQuery(initial?.categories, seededAt)
 
   const products = productsQuery.data ?? []
   const categories = categoriesQuery.data ?? defaultCategories
-  const loading = productsQuery.isPending || categoriesQuery.isPending
+  const loading =
+    !initial?.products?.length &&
+    !initial?.categories?.length &&
+    (productsQuery.isPending || categoriesQuery.isPending)
   const error =
     (productsQuery.error instanceof Error ? productsQuery.error.message : null) ??
     (categoriesQuery.error instanceof Error ? categoriesQuery.error.message : null)

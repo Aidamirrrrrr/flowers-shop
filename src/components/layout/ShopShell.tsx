@@ -33,9 +33,7 @@ export function ShopShell({ children }: { children: React.ReactNode }) {
             : 'pb-[calc(var(--tab-bar-height)+env(safe-area-inset-bottom,0px)+16px)]',
         )}
       >
-        <div key={pathname} className="animate-page-enter">
-          {children}
-        </div>
+        {children}
       </main>
       {!hideTab && <TabBar />}
     </div>

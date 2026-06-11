@@ -12,12 +12,16 @@ async function fetchCategories() {
   return data.categories
 }
 
-export function useCategoriesQuery(initialData?: CatalogCategory[]) {
+export function useCategoriesQuery(initialData?: CatalogCategory[], seededAt?: number) {
+  const hasSeed = Boolean(initialData?.length && seededAt)
+
   return useQuery({
     queryKey: queryKeys.categories,
     queryFn: fetchCategories,
-    initialData: initialData?.length ? initialData : undefined,
+    initialData: hasSeed ? initialData : undefined,
+    initialDataUpdatedAt: hasSeed ? seededAt : undefined,
     staleTime: 60_000,
+    refetchOnMount: hasSeed ? false : undefined,
   })
 }
 

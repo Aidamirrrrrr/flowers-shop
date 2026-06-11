@@ -11,6 +11,7 @@ type ShopProvidersProps = {
   initial: {
     products: CatalogProduct[]
     categories: CatalogCategory[]
+    fetchedAt: number
   }
 }
 

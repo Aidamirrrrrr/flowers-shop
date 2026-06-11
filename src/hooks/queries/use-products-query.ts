@@ -10,11 +10,15 @@ async function fetchProducts() {
   return data.products
 }
 
-export function useProductsQuery(initialData?: CatalogProduct[]) {
+export function useProductsQuery(initialData?: CatalogProduct[], seededAt?: number) {
+  const hasSeed = Boolean(initialData?.length && seededAt)
+
   return useQuery({
     queryKey: queryKeys.products,
     queryFn: fetchProducts,
-    initialData: initialData?.length ? initialData : undefined,
+    initialData: hasSeed ? initialData : undefined,
+    initialDataUpdatedAt: hasSeed ? seededAt : undefined,
     staleTime: 60_000,
+    refetchOnMount: hasSeed ? false : undefined,
   })
 }
