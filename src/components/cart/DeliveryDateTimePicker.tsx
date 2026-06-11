@@ -3,42 +3,46 @@
 import { useMemo, useState } from 'react'
 import { format, startOfDay } from 'date-fns'
 import { ru } from 'date-fns/locale'
-import { CalendarIcon, Clock } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { ChevronDownIcon } from 'lucide-react'
+import { ru as ruDayPicker } from 'react-day-picker/locale'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
-import { Label } from '@/components/ui/label'
+import { Field, FieldGroup, FieldLabel } from '@/components/ui/field'
+import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { cn } from '@/lib/utils'
 
-const TIME_SLOTS = (() => {
-  const slots: string[] = []
-  for (let hour = 9; hour <= 21; hour++) {
-    for (const minute of [0, 30]) {
-      if (hour === 21 && minute === 30) break
-      slots.push(`${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`)
+function parsePickerValue(value: string): { date?: Date; time: string } {
+  if (!value) return { time: '12:00' }
+
+  const localMatch = /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})/.exec(value)
+  if (localMatch) {
+    const [, datePart, timePart] = localMatch
+    const date = new Date(`${datePart}T${timePart}:00`)
+    if (!Number.isNaN(date.getTime())) {
+      return { date, time: timePart }
     }
   }
-  return slots
-})()
 
-function parseValue(value: string): { date?: Date; time: string } {
-  if (!value) return { time: '12:00' }
-  const [datePart, timePart] = value.split('T')
-  const date = datePart ? new Date(`${datePart}T12:00:00`) : undefined
-  const time = timePart?.slice(0, 5) || '12:00'
-  return { date: date && !Number.isNaN(date.getTime()) ? date : undefined, time }
+  const parsed = new Date(value)
+  if (!Number.isNaN(parsed.getTime())) {
+    const pad = (n: number) => String(n).padStart(2, '0')
+    return {
+      date: parsed,
+      time: `${pad(parsed.getHours())}:${pad(parsed.getMinutes())}`,
+    }
+  }
+
+  return { time: '12:00' }
 }
 
-function toValue(date: Date | undefined, time: string): string {
-  if (!date) return ''
-  return `${format(date, 'yyyy-MM-dd')}T${time}`
+function toPickerValue(date: Date | undefined, time: string): string {
+  if (!date || !time) return ''
+  const [hours, minutes] = time.split(':').map(Number)
+  const next = new Date(date)
+  next.setHours(hours, minutes, 0, 0)
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${format(next, 'yyyy-MM-dd')}T${pad(next.getHours())}:${pad(next.getMinutes())}`
 }
 
 type DeliveryDateTimePickerProps = {
@@ -56,74 +60,70 @@ export function DeliveryDateTimePicker({
   allowPastDates = false,
   showHint = true,
 }: DeliveryDateTimePickerProps) {
-  const [open, setOpen] = useState(false)
-  const { date, time } = useMemo(() => parseValue(value), [value])
+  const [dateOpen, setDateOpen] = useState(false)
+  const { date, time } = useMemo(() => parsePickerValue(value), [value])
   const today = startOfDay(new Date())
 
-  const displayLabel =
-    date && value
-      ? `${format(date, 'd MMMM yyyy', { locale: ru })}, ${time}`
-      : 'Выберите дату и время'
-
-  const update = (nextDate: Date | undefined, nextTime: string) => {
+  const setDate = (nextDate: Date | undefined) => {
     if (!nextDate) return
-    onChange(toValue(nextDate, nextTime))
+    onChange(toPickerValue(nextDate, time))
+    setDateOpen(false)
+  }
+
+  const setTime = (nextTime: string) => {
+    const baseDate = date ?? today
+    onChange(toPickerValue(baseDate, nextTime))
   }
 
   return (
     <div className="space-y-2">
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            id={id}
-            type="button"
-            variant="outline"
-            className={cn(
-              'h-9 w-full justify-start text-left font-normal',
-              !value && 'text-muted-foreground',
-            )}
-          >
-            <CalendarIcon className="mr-2 h-4 w-4 shrink-0" />
-            <span className="truncate">{displayLabel}</span>
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
-          <Calendar
-            mode="single"
-            selected={date}
-            onSelect={(next) => update(next, time)}
-            disabled={allowPastDates ? undefined : (day) => day < today}
-            initialFocus
+      <FieldGroup className="flex-row gap-3">
+        <Field className="min-w-0 flex-1">
+          <FieldLabel htmlFor={id ? `${id}-date` : undefined}>Дата</FieldLabel>
+          <Popover open={dateOpen} onOpenChange={setDateOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                id={id ? `${id}-date` : undefined}
+                type="button"
+                variant="outline"
+                data-empty={!date}
+                className={cn(
+                  'w-full justify-between font-normal data-[empty=true]:text-muted-foreground',
+                )}
+              >
+                <span className="truncate">
+                  {date ? format(date, 'd MMM yyyy', { locale: ru }) : 'Выберите дату'}
+                </span>
+                <ChevronDownIcon className="size-4 shrink-0 opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+              <Calendar
+                mode="single"
+                locale={ruDayPicker}
+                selected={date}
+                defaultMonth={date ?? today}
+                captionLayout="dropdown"
+                onSelect={setDate}
+                disabled={allowPastDates ? undefined : (day) => day < today}
+              />
+            </PopoverContent>
+          </Popover>
+        </Field>
+        <Field className="w-[7.25rem] shrink-0">
+          <FieldLabel htmlFor={id ? `${id}-time` : undefined}>Время</FieldLabel>
+          <Input
+            id={id ? `${id}-time` : undefined}
+            type="time"
+            step={1800}
+            value={time}
+            onChange={(e) => setTime(e.target.value)}
+            className="appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
           />
-          <div className="border-t border-border p-3">
-            <Label className="mb-2 flex items-center gap-1.5 text-xs text-muted-foreground">
-              <Clock className="h-3.5 w-3.5" />
-              Время доставки
-            </Label>
-            <Select
-              value={time}
-              onValueChange={(nextTime) => {
-                const baseDate = date ?? today
-                update(baseDate, nextTime)
-                setOpen(false)
-              }}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Время" />
-              </SelectTrigger>
-              <SelectContent>
-                {TIME_SLOTS.map((slot) => (
-                  <SelectItem key={slot} value={slot}>
-                    {slot}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </PopoverContent>
-      </Popover>
+        </Field>
+      </FieldGroup>
       {showHint && (
-        <p className="text-xs text-muted-foreground">Интервалы с 9:00 до 21:00</p>
+        <p className="text-xs text-muted-foreground">Доставка с 9:00 до 21:00</p>
       )}
     </div>
   )
