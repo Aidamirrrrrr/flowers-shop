@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
+import { TELEGRAM_CHANNEL_URL } from '@/constants/brand'
 import { applyTelegramTheme } from './applyTheme'
 import { hapticImpact } from './haptic'
 import { getWebApp } from './webApp'
@@ -110,6 +111,11 @@ export function showDemoAlert(message: string) {
 export function openSupport() {
   if (typeof window === 'undefined') return
   getWebApp().openTelegramLink('https://t.me/support')
+}
+
+export function openChannel() {
+  if (typeof window === 'undefined') return
+  getWebApp().openTelegramLink(TELEGRAM_CHANNEL_URL)
 }
 
 export { isDevMockActive } from './mockWebApp'

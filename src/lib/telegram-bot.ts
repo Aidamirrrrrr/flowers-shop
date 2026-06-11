@@ -1,4 +1,4 @@
-import { BRAND_NAME } from '@/constants/brand'
+import { BRAND_NAME, TELEGRAM_CHANNEL_URL } from '@/constants/brand'
 
 const TELEGRAM_API = 'https://api.telegram.org'
 
@@ -60,13 +60,19 @@ export async function sendStartMessage(chatId: number) {
 
   return callTelegramApi('sendMessage', {
     chat_id: chatId,
-    text: `Добро пожаловать в ${BRAND_NAME}! 🌸\n\nНажмите кнопку ниже, чтобы открыть каталог и оформить заказ.`,
+    text: `Добро пожаловать в ${BRAND_NAME}!\n\nНажмите кнопку ниже, чтобы открыть каталог и оформить заказ.`,
     reply_markup: {
       inline_keyboard: [
         [
           {
             text: 'Открыть магазин',
             web_app: { url: webAppUrl },
+          },
+        ],
+        [
+          {
+            text: 'Канал ELEMENT Concept',
+            url: TELEGRAM_CHANNEL_URL,
           },
         ],
       ],

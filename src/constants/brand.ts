@@ -1,1 +1,2 @@
 export const BRAND_NAME = 'ELEMENT CONCEPT'
+export const TELEGRAM_CHANNEL_URL = 'https://t.me/elementbymosk'

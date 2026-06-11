@@ -1,7 +1,7 @@
 'use client'
 
-import { MessageCircle } from 'lucide-react'
-import { useTelegramUser, openSupport } from '@/telegram/useTelegram'
+import { Megaphone, MessageCircle } from 'lucide-react'
+import { useTelegramUser, openChannel, openSupport } from '@/telegram/useTelegram'
 import { useSession } from '@/context/SessionContext'
 import { useOrders } from '@/hooks/useOrders'
 import { formatPrice } from '@/lib/format-price'
@@ -55,6 +55,12 @@ export function ProfilePage() {
 
       <Card className="overflow-hidden py-0">
         <MenuRow icon={MessageCircle} label="Написать в поддержку" onClick={openSupport} />
+        <MenuRow
+          icon={Megaphone}
+          label="Канал ELEMENT Concept"
+          onClick={openChannel}
+          className="border-t border-border"
+        />
       </Card>
 
       <section className="space-y-3">
