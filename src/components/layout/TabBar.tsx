@@ -31,8 +31,7 @@ export function TabBar() {
 
   return (
     <nav
-      className="fixed bottom-0 left-1/2 z-50 flex w-full max-w-[var(--app-max-width)] -translate-x-1/2 border-t border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80"
-      style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+      className="fixed bottom-0 left-1/2 z-50 flex h-[calc(var(--tab-bar-height)+env(safe-area-inset-bottom,0px))] w-full max-w-[var(--app-max-width)] -translate-x-1/2 border-t border-border bg-background/95 pb-[env(safe-area-inset-bottom,0px)] backdrop-blur supports-[backdrop-filter]:bg-background/80"
       aria-label="Основная навигация"
     >
       {tabs.map(({ href, label, icon: TabIcon, exact }) => {
@@ -42,11 +41,11 @@ export function TabBar() {
             key={href}
             href={href}
             className={cn(
-              'relative flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-[10px] font-medium transition-colors',
+              'relative flex h-full flex-1 flex-col items-center justify-center gap-1 text-[11px] font-medium transition-colors',
               isActive ? 'text-foreground' : 'text-muted-foreground',
             )}
           >
-            <TabIcon className="h-5 w-5" strokeWidth={isActive ? 2.25 : 1.75} />
+            <TabIcon className="h-[22px] w-[22px]" strokeWidth={isActive ? 2.25 : 1.75} />
             <span>{label}</span>
             {href === '/cart' && itemCount > 0 && (
               <span className="absolute right-[calc(50%-22px)] top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[9px] font-bold text-primary-foreground">

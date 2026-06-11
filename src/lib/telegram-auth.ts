@@ -2,9 +2,9 @@ import { validateInitData, parseTelegramUser, type TelegramUser } from '@/lib/te
 
 const DEV_MOCK_USER: TelegramUser = {
   id: 100001,
-  first_name: 'Анна',
-  last_name: 'Демо',
-  username: 'demo_flowers',
+  first_name: 'Aidmair',
+  last_name: '',
+  username: 'aidamirrrrrr',
 }
 
 export function resolveTelegramUser(initData: string): TelegramUser | null {

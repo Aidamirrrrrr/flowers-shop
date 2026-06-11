@@ -51,17 +51,22 @@ async function main() {
     where: { telegramId: BigInt(100001) },
     create: {
       telegramId: BigInt(100001),
-      username: 'demo_flowers',
-      firstName: 'Анна',
-      lastName: 'Демо',
+      username: 'aidamirrrrrr',
+      firstName: 'Aidmair',
+      lastName: null,
       role: 'ADMIN',
     },
     update: {
-      username: 'demo_flowers',
-      firstName: 'Анна',
-      lastName: 'Демо',
+      username: 'aidamirrrrrr',
+      firstName: 'Aidmair',
+      lastName: null,
       role: 'ADMIN',
     },
+  })
+
+  await prisma.user.updateMany({
+    where: { username: { equals: 'aidamirrrrrr', mode: 'insensitive' } },
+    data: { role: 'ADMIN' },
   })
 
   await prisma.appSettings.upsert({

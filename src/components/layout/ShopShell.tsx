@@ -18,7 +18,6 @@ export function ShopShell({ children }: { children: React.ReactNode }) {
 
   const pathname = usePathname()
   const hideTab = shouldHideTabBar(pathname)
-  const isCheckout = pathname === '/cart/checkout'
 
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-[var(--app-max-width)] flex-col bg-background">
@@ -28,8 +27,7 @@ export function ShopShell({ children }: { children: React.ReactNode }) {
           'flex-1 px-4 pt-3',
           hideTab
             ? 'pb-[calc(env(safe-area-inset-bottom,0px)+16px)]'
-            : 'pb-[calc(56px+env(safe-area-inset-bottom,0px)+16px)]',
-          isCheckout && 'pb-[calc(80px+env(safe-area-inset-bottom,0px)+16px)]',
+            : 'pb-[calc(var(--tab-bar-height)+env(safe-area-inset-bottom,0px)+16px)]',
         )}
       >
         <div key={pathname} className="animate-fade-in-up">

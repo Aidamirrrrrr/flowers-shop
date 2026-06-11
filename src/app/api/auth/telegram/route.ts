@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { roleForUsername } from '@/constants/admins'
 import { COOKIE_NAME, createSessionToken } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { resolveTelegramUser } from '@/lib/telegram-auth'
@@ -12,6 +13,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const role = roleForUsername(telegramUser.username)
+
     const user = await prisma.user.upsert({
       where: { telegramId: BigInt(telegramUser.id) },
       create: {
@@ -19,11 +22,13 @@ export async function POST(request: Request) {
         username: telegramUser.username ?? null,
         firstName: telegramUser.first_name,
         lastName: telegramUser.last_name ?? null,
+        role,
       },
       update: {
         username: telegramUser.username ?? null,
         firstName: telegramUser.first_name,
         lastName: telegramUser.last_name ?? null,
+        role,
       },
     })
 

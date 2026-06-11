@@ -36,7 +36,7 @@ export function CartPage() {
   }
 
   return (
-    <div className="space-y-4 pb-24">
+    <div className="space-y-4">
       <PageHeader title="Корзина" />
       <div className="space-y-3">
         {items.map((item) => (
@@ -51,7 +51,7 @@ export function CartPage() {
 
       <CartSuggestions />
 
-      <Card className="fixed bottom-[calc(56px+env(safe-area-inset-bottom,0px))] left-1/2 z-40 w-[calc(100%-32px)] max-w-[var(--app-max-width)] -translate-x-1/2 shadow-md">
+      <Card className="shadow-sm">
         <CardContent className="space-y-3 p-4">
           <div className="flex items-center justify-between text-sm">
             <span className="text-muted-foreground">

@@ -86,9 +86,9 @@ export function createMockWebApp() {
     initDataUnsafe: {
       user: {
         id: 100001,
-        first_name: 'Анна',
-        last_name: 'Демо',
-        username: 'demo_flowers',
+        first_name: 'Aidmair',
+        last_name: '',
+        username: 'aidamirrrrrr',
         language_code: 'ru',
         allows_write_to_pm: true,
         photo_url: undefined as string | undefined,
