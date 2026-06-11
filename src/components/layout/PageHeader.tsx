@@ -17,7 +17,9 @@ export function PageHeader({ title, largeLogo, children }: PageHeaderProps) {
       )}
     >
       <Logo size={largeLogo ? 'md' : 'sm'} />
-      <h1 className="m-0 text-[0.95rem] font-medium uppercase tracking-[0.12em]">{title}</h1>
+      <h1 className="m-0 min-w-0 flex-1 truncate text-[0.95rem] font-medium uppercase tracking-[0.12em]">
+        {title}
+      </h1>
       {children}
     </header>
   )

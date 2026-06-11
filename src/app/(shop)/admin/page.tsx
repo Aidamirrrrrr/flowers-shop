@@ -1,5 +1,5 @@
-import { AdminPage } from '@/views/AdminPage'
+import { redirect } from 'next/navigation'
 
-export default function Page() {
-  return <AdminPage />
+export default function AdminIndexPage() {
+  redirect('/admin/orders')
 }

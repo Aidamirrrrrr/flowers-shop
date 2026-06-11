@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { Pencil, Plus, Trash2 } from 'lucide-react'
 import type { AdminProduct } from '@/types/admin'
 import { Button } from '@/components/ui/button'
@@ -23,8 +24,6 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 type AdminProductsTabProps = {
   products: AdminProduct[]
   loading: boolean
-  onCreate: () => void
-  onEdit: (productId: string) => void
   onToggleActive: (productId: string, active: boolean) => void
   onDelete: (productId: string) => Promise<string | null>
 }
@@ -32,8 +31,6 @@ type AdminProductsTabProps = {
 export function AdminProductsTab({
   products,
   loading,
-  onCreate,
-  onEdit,
   onToggleActive,
   onDelete,
 }: AdminProductsTabProps) {
@@ -68,9 +65,11 @@ export function AdminProductsTab({
         </Alert>
       )}
 
-      <Button type="button" className="w-full" onClick={onCreate}>
-        <Plus className="mr-2 h-4 w-4" />
-        Добавить товар
+      <Button type="button" className="w-full" asChild>
+        <Link href="/admin/products/new">
+          <Plus className="mr-2 h-4 w-4" />
+          Добавить товар
+        </Link>
       </Button>
 
       {products.length === 0 ? (
@@ -101,9 +100,11 @@ export function AdminProductsTab({
                   </Badge>
                 </div>
                 <div className="mt-3 flex flex-wrap gap-2">
-                  <Button type="button" variant="outline" size="sm" onClick={() => onEdit(product.id)}>
-                    <Pencil className="mr-1.5 h-3.5 w-3.5" />
-                    Изменить
+                  <Button type="button" variant="outline" size="sm" asChild>
+                    <Link href={`/admin/products/${product.id}/edit`}>
+                      <Pencil className="mr-1.5 h-3.5 w-3.5" />
+                      Изменить
+                    </Link>
                   </Button>
                   <Button
                     type="button"

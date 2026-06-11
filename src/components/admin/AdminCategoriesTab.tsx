@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { Pencil, Plus, Trash2 } from 'lucide-react'
 import type { AdminCategory } from '@/types/admin'
 import { Button } from '@/components/ui/button'
@@ -22,16 +23,12 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 type AdminCategoriesTabProps = {
   categories: AdminCategory[]
   loading: boolean
-  onCreate: () => void
-  onEdit: (categoryId: string) => void
   onDelete: (categoryId: string) => Promise<string | null>
 }
 
 export function AdminCategoriesTab({
   categories,
   loading,
-  onCreate,
-  onEdit,
   onDelete,
 }: AdminCategoriesTabProps) {
   const [deleteId, setDeleteId] = useState<string | null>(null)
@@ -65,9 +62,11 @@ export function AdminCategoriesTab({
         </Alert>
       )}
 
-      <Button type="button" className="w-full" onClick={onCreate}>
-        <Plus className="mr-2 h-4 w-4" />
-        Добавить категорию
+      <Button type="button" className="w-full" asChild>
+        <Link href="/admin/categories/new">
+          <Plus className="mr-2 h-4 w-4" />
+          Добавить категорию
+        </Link>
       </Button>
 
       {categories.length === 0 ? (
@@ -88,8 +87,10 @@ export function AdminCategoriesTab({
               </div>
               <div className="flex shrink-0 items-center gap-2">
                 <Badge variant="secondary">{category.productCount} тов.</Badge>
-                <Button type="button" variant="outline" size="icon" onClick={() => onEdit(category.id)}>
-                  <Pencil className="h-4 w-4" />
+                <Button type="button" variant="outline" size="icon" asChild>
+                  <Link href={`/admin/categories/${category.id}/edit`}>
+                    <Pencil className="h-4 w-4" />
+                  </Link>
                 </Button>
                 <Button
                   type="button"

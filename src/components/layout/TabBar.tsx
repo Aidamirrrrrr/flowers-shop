@@ -41,7 +41,7 @@ export function TabBar() {
             key={href}
             href={href}
             className={cn(
-              'relative flex h-full flex-1 flex-col items-center justify-center gap-1 text-[11px] font-medium transition-colors',
+              'relative flex h-full flex-1 flex-col items-center justify-center gap-1.5 py-2 text-[11px] font-medium transition-colors',
               isActive ? 'text-foreground' : 'text-muted-foreground',
             )}
           >

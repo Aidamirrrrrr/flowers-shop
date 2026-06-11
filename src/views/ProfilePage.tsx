@@ -1,6 +1,6 @@
 'use client'
 
-import { MessageCircle, Shield } from 'lucide-react'
+import { MessageCircle } from 'lucide-react'
 import { useTelegramUser, openSupport } from '@/telegram/useTelegram'
 import { useSession } from '@/context/SessionContext'
 import { useOrders } from '@/hooks/useOrders'
@@ -10,7 +10,6 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import { MenuRow } from '@/components/ui/menu-row'
-import { Separator } from '@/components/ui/separator'
 
 export function ProfilePage() {
   const tgUser = useTelegramUser()
@@ -55,12 +54,6 @@ export function ProfilePage() {
       </Card>
 
       <Card className="overflow-hidden py-0">
-        {me?.isAdmin && (
-          <>
-            <MenuRow icon={Shield} label="Админ-панель" href="/admin" />
-            <Separator />
-          </>
-        )}
         <MenuRow icon={MessageCircle} label="Написать в поддержку" onClick={openSupport} />
       </Card>
 

@@ -52,3 +52,15 @@ pnpm db:setup     # push + seed
 
 После `pnpm db:seed` пользователь TG mock (id `100001`) — **ADMIN**.  
 Вкладка «Админ» появится в нижнем таб-баре.
+
+## Telegram-бот (/start)
+
+В Variables задайте `TELEGRAM_BOT_TOKEN`, `TELEGRAM_WEBAPP_URL` (HTTPS вашего деплоя) и `TELEGRAM_WEBHOOK_SECRET`.
+
+После деплоя один раз зарегистрируйте webhook:
+
+```bash
+curl -X POST "https://YOUR-APP.up.railway.app/api/telegram/set-webhook?secret=YOUR_WEBHOOK_SECRET"
+```
+
+Команда `/start` в боте ответит приветствием и кнопкой **«Открыть магазин»** для запуска Mini App.

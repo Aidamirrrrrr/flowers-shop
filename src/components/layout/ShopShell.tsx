@@ -9,7 +9,10 @@ import { cn } from '@/lib/utils'
 const HIDE_TAB_PREFIXES = ['/product/', '/cart/checkout']
 
 function shouldHideTabBar(pathname: string) {
-  return HIDE_TAB_PREFIXES.some((p) => pathname.startsWith(p))
+  if (HIDE_TAB_PREFIXES.some((p) => pathname.startsWith(p))) return true
+  if (/^\/admin\/products\/.+/.test(pathname)) return true
+  if (/^\/admin\/categories\/.+/.test(pathname)) return true
+  return false
 }
 
 export function ShopShell({ children }: { children: React.ReactNode }) {
